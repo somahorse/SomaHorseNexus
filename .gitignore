@@ -1,0 +1,113 @@
+# Python / FastAPI / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+*.egg-info/
+dist/
+build/
+develop-eggs/
+eggs/
+# lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg
+*.eggs/
+.installed.cfg
+*.manifest
+*.spec
+*.pyc
+*.pyo
+*.pyd
+.Python
+.env
+.venv
+venv/
+ENV/
+env/
+*.env.local
+*.env.development.local
+*.env.test.local
+*.env.production.local
+*.env.bootstrap
+
+# Firebase / Credentials (VERY important!)
+firebase-service-account.json
+firebase-adminsdk-*.json
+firebase-adminsdk.json
+*-firebase-adminsdk-*.json
+*.service-account.json
+
+# Logs & temp files
+*.log
+logs/
+log/
+tmp/
+temp/
+*.bak
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+*.iml
+
+# Testing & coverage
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+coverage/
+.tox/
+.nox/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.dmypy.json
+.pytype/
+
+# Dependency directories (if you ever install frontend in same repo)
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.pnpm-debug.log
+
+# Build outputs (if you have frontend here)
+dist/
+build/
+out/
+.next/
+.nuxt/
+.output/
+
+# Optional: ignore large data / media files (uncomment if needed)
+# *.pdf
+# *.zip
+# *.tar.gz
+# media/
+# uploads/
+
+# MacOS junk
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows junk
+Thumbs.db
+ehthumbs.db
+Desktop.ini

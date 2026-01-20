@@ -1,0 +1,13 @@
+# requirements.txt
+fastapi[standard]
+uvicorn[standard]
+firebase-admin
+pydantic-settings
+python-dotenv
+requests
+
+# Dev tools (optional but recommended)
+pytest
+pytest-asyncio
+httpx
+
