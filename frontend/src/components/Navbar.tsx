@@ -22,7 +22,9 @@ export default function Navbar() {
         pathname === '/signup' ||
         pathname?.startsWith('/auth') ||
         pathname?.startsWith('/onboarding') ||
+        pathname?.startsWith('/client/onboarding') ||
         pathname?.startsWith('/assessments') ||
+        pathname?.startsWith('/admin') ||
         pathname === '/dashboard';
 
     if (isHidden) {

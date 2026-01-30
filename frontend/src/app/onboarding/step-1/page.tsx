@@ -3,29 +3,52 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { doc, updateDoc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { X, Plus, Save, Info, CheckCircle2, Briefcase, Clock, Zap } from "lucide-react";
+import { X, Plus, Save, Info, CheckCircle2, Briefcase, Clock, Zap, LogOut } from "lucide-react";
 
 export default function OnboardingStep1() {
-    const { user } = useAuth();
+    const { user, refreshUserData, logout } = useAuth();
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [pageLoading, setPageLoading] = useState(true);
 
+    const handleLogout = async () => {
+        if (logout) {
+            await logout();
+            router.push("/");
+        }
+    };
+
     // Strict Step Guard
     useEffect(() => {
         const checkStep = async () => {
-            if (!user) return;
+            if (!user) {
+                router.replace("/login");
+                setPageLoading(false);
+                return;
+            }
+            if (((user as any)?.role ?? "talent") !== "talent") {
+                router.replace("/dashboard");
+                setPageLoading(false);
+                return;
+            }
             const docRef = doc(db, "users", user.uid);
             const snapshot = await getDoc(docRef);
             if (snapshot.exists()) {
                 const data = snapshot.data();
+                if (data.role && data.role !== "talent") {
+                    router.replace("/dashboard");
+                    setPageLoading(false);
+                    return;
+                }
                 if (data.onboardingStep && data.onboardingStep > 1) {
                     router.replace('/assessments/aptitude');
                 } else {
                     setPageLoading(false);
                 }
+            } else {
+                setPageLoading(false);
             }
         };
         checkStep();
@@ -71,7 +94,7 @@ export default function OnboardingStep1() {
         setLoading(true);
         try {
             const userRef = doc(db, "users", user.uid);
-            await updateDoc(userRef, {
+            await setDoc(userRef, {
                 bio,
                 experience,
                 role,
@@ -81,7 +104,10 @@ export default function OnboardingStep1() {
                 skills,
                 onboardingStep: 2,
                 updatedAt: new Date().toISOString()
-            });
+            }, { merge: true });
+            if (refreshUserData) {
+                await refreshUserData();
+            }
             router.replace('/assessments/aptitude');
         } catch (error) {
             console.error("Error saving profile:", error);
@@ -147,9 +173,35 @@ export default function OnboardingStep1() {
                     </div>
                 </div>
 
-                {/* Right Side: The Long Form */}
                 <div className="w-full lg:w-2/3 lg:ml-[33.333%] p-6 lg:p-24 bg-white">
                     <div className="max-w-3xl mx-auto">
+
+                        {/* User Header */}
+                        <div className="flex items-center justify-between gap-4 mb-10 pb-6 border-b border-slate-100">
+                            <div className="flex items-center gap-4">
+                                <div className="h-16 w-16 rounded-full bg-slate-100 overflow-hidden ring-4 ring-white shadow-lg">
+                                    {user?.photoURL ? (
+                                        <img src={user.photoURL} alt={user.displayName || "User"} className="h-full w-full object-cover" />
+                                    ) : (
+                                        <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-cyan-500 to-violet-600 text-white font-bold text-2xl">
+                                            {user?.email?.charAt(0).toUpperCase() || "U"}
+                                        </div>
+                                    )}
+                                </div>
+                                <div>
+                                    <h2 className="text-xl font-bold text-slate-900">{user?.displayName || "Welcome"}</h2>
+                                    <p className="text-sm text-slate-500">{user?.email}</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={handleLogout}
+                                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                            >
+                                <LogOut size={18} />
+                                <span>Logout</span>
+                            </button>
+                        </div>
+
                         <form onSubmit={handleSubmit} className="space-y-12">
 
                             {/* Section 1: Core Identity */}
@@ -292,8 +344,8 @@ export default function OnboardingStep1() {
                                                 key={pref.id}
                                                 onClick={() => toggleProjectPref(pref.id)}
                                                 className={`cursor-pointer p-4 rounded-xl border transition-all ${projectPreference.includes(pref.id)
-                                                        ? 'border-cyan-500 bg-cyan-50 ring-1 ring-cyan-500'
-                                                        : 'border-slate-200 hover:border-slate-300 bg-white'
+                                                    ? 'border-cyan-500 bg-cyan-50 ring-1 ring-cyan-500'
+                                                    : 'border-slate-200 hover:border-slate-300 bg-white'
                                                     }`}
                                             >
                                                 <div className="flex justify-between items-start">

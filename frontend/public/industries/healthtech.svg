@@ -1,0 +1,24 @@
+<svg width="800" height="520" viewBox="0 0 800 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="800" y2="520" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4F46E5"/>
+      <stop offset="1" stop-color="#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#10162F"/>
+      <stop offset="1" stop-color="#0B1020"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="520" rx="36" fill="url(#bg)"/>
+  <circle cx="640" cy="120" r="120" fill="white" fill-opacity="0.12"/>
+  <circle cx="160" cy="420" r="140" fill="white" fill-opacity="0.10"/>
+  <rect x="170" y="120" width="460" height="280" rx="28" fill="url(#card)" stroke="white" stroke-opacity="0.15" stroke-width="2"/>
+  <rect x="360" y="190" width="80" height="160" rx="10" fill="#E0E7FF" fill-opacity="0.9"/>
+  <rect x="320" y="230" width="160" height="80" rx="10" fill="#C7D2FE" fill-opacity="0.9"/>
+  <path d="M230 200H310" stroke="#A5B4FC" stroke-width="6" stroke-linecap="round"/>
+  <path d="M230 240H300" stroke="#A5B4FC" stroke-width="6" stroke-linecap="round"/>
+  <path d="M230 280H310" stroke="#A5B4FC" stroke-width="6" stroke-linecap="round"/>
+  <path d="M470 210H570" stroke="#A5B4FC" stroke-width="6" stroke-linecap="round"/>
+  <path d="M470 250H560" stroke="#A5B4FC" stroke-width="6" stroke-linecap="round"/>
+  <path d="M470 290H570" stroke="#A5B4FC" stroke-width="6" stroke-linecap="round"/>
+</svg>
