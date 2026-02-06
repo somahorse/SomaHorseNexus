@@ -132,7 +132,7 @@ const pillars = [
   },
   {
     title: "Impact visibility",
-    detail: "Dashboards track ROI, earnings, completion rates, and ecosystem health signals.",
+    detail: "Dashboards track ROI, earnings, completion rates, and ecosystem health signals ORI.",
     icon: BarChart3,
   },
 ];
