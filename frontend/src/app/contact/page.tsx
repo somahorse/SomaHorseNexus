@@ -49,7 +49,7 @@ export default function ContactPage() {
       }
     >
       {/* Hero */}
-      <section className="relative overflow-hidden pt-32 pb-24 lg:pt-40 lg:pb-32">
+      <section className="relative overflow-hidden pt-12 pb-24 lg:pt-20 lg:pb-32">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute -top-16 left-1/2 h-72 w-[36rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,_rgba(79,70,229,0.28)_0%,_rgba(79,70,229,0)_68%)] blur-2xl" />
           <div className="absolute bottom-10 right-10 h-80 w-80 rounded-full bg-[radial-gradient(circle,_rgba(124,58,237,0.25)_0%,_rgba(124,58,237,0)_70%)] blur-2xl" />

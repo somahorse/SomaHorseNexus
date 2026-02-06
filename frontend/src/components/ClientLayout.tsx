@@ -24,7 +24,12 @@ function MobileMenu() {
         >
             <div className="flex flex-col h-full p-6">
                 <div className="mb-8 mt-2">
-                    <span className="text-xl font-bold tracking-tight text-slate-900">Somahorse Nexus</span>
+                    <div className="flex items-center gap-2">
+                        <span className="text-xl font-bold tracking-tight text-slate-900">Somahorse Nexus</span>
+                        <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-gradient-to-r from-cyan-500 to-violet-600 text-white">
+                            Beta
+                        </span>
+                    </div>
                 </div>
 
                 <nav className="flex flex-col gap-2">
@@ -36,8 +41,8 @@ function MobileMenu() {
                                 href={link.href}
                                 onClick={closeMenu}
                                 className={`text-lg px-4 py-3 rounded-lg transition-all duration-300 ${isActive
-                                        ? "bg-gradient-to-r from-cyan-400/10 to-violet-500/10 text-slate-900 font-bold border-l-4 border-cyan-400"
-                                        : "text-slate-600 hover:text-slate-900 hover:bg-gradient-to-r hover:from-cyan-400/5 hover:to-violet-500/5"
+                                    ? "bg-gradient-to-r from-cyan-400/10 to-violet-500/10 text-slate-900 font-bold border-l-4 border-cyan-400"
+                                    : "text-slate-600 hover:text-slate-900 hover:bg-gradient-to-r hover:from-cyan-400/5 hover:to-violet-500/5"
                                     }`}
                             >
                                 {link.label}

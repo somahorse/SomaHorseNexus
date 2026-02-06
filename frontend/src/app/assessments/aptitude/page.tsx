@@ -410,7 +410,18 @@ export default function AptitudeTestPage() {
     if (cooldownInfo) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center px-6">
-                <div className="max-w-xl w-full bg-white rounded-3xl shadow-xl border border-slate-100 p-8 text-center">
+                <div className="max-w-xl w-full bg-white rounded-3xl shadow-xl border border-slate-100 p-8 text-center relative">
+                    {/* Logout Button */}
+                    <div className="absolute top-6 right-6">
+                        <button
+                            onClick={handleLogout}
+                            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                        >
+                            <LogOut size={18} />
+                            <span>Logout</span>
+                        </button>
+                    </div>
+
                     <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
                         <AlertTriangle className="text-amber-600" size={28} />
                     </div>

@@ -115,10 +115,46 @@ export default function AdminProjectsPage() {
 
     const updateProjectStatus = async (projectId: string, newStatus: string) => {
         try {
+            const project = projects.find(p => p.id === projectId);
+            
             await updateDoc(doc(db, "projects", projectId), {
                 status: newStatus,
                 updatedAt: new Date().toISOString(),
             });
+
+            // If approving, trigger auto-assignment of talent
+            if (newStatus === "approved" && project) {
+                try {
+                    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/matching/auto-assign`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            project_id: projectId,
+                            client_id: project.clientId,
+                            client_name: project.organization?.name || project.clientEmail,
+                            client_email: project.clientEmail,
+                            service_type: project.solution,
+                            tier: project.tier,
+                        }),
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log(`Auto-assigned ${data.assigned_count} talent to project`);
+                        
+                        // Update project status to in_progress after assignment
+                        await updateDoc(doc(db, "projects", projectId), {
+                            status: "in_progress",
+                            collaborationId: data.collaboration_id,
+                        });
+                        
+                        setProjects(projects.map(p => p.id === projectId ? { ...p, status: "in_progress" } : p));
+                    }
+                } catch (assignError) {
+                    console.error("Error auto-assigning talent:", assignError);
+                }
+            }
+
             setProjects(projects.map(p => p.id === projectId ? { ...p, status: newStatus } : p));
             setActionMenuOpen(null);
         } catch (error) {

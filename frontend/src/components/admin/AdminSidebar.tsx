@@ -15,14 +15,17 @@ import {
     X,
     BarChart3,
     Bell,
+    ClipboardList,
 } from "lucide-react";
 import { useState } from "react";
+import NotificationBell from "@/components/notifications/NotificationBell";
 
 const menuLinks = [
     { href: "/admin", label: "Overview", icon: LayoutDashboard },
     { href: "/admin/users", label: "All Users", icon: Users },
     { href: "/admin/talent", label: "Talent Pool", icon: UserCheck },
     { href: "/admin/projects", label: "Projects", icon: FolderKanban },
+    { href: "/admin/applications", label: "Applications", icon: ClipboardList },
     { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
     { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
@@ -117,10 +120,9 @@ export default function AdminSidebar() {
                                 <p className="text-sm font-medium text-white truncate">{displayName}</p>
                                 <p className="text-xs text-slate-500 truncate">{email}</p>
                             </div>
-                            <button className="p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg transition-all relative">
-                                <Bell size={16} />
-                                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                            </button>
+                            {user && (
+                                <NotificationBell userId={user.uid} userRole="admin" />
+                            )}
                         </div>
 
                         <button

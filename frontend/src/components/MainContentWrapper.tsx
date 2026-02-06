@@ -15,14 +15,17 @@ export default function MainContentWrapper({ children }: { children: React.React
         pathname?.startsWith('/client/onboarding') ||
         pathname?.startsWith('/assessments') ||
         pathname?.startsWith('/admin') ||
-        pathname === '/dashboard';
+        pathname?.startsWith('/dashboard') ||
+        pathname?.startsWith('/projects');
+    // Check if this is a dashboard/admin route where we need full-height layout
+    const isDashboardRoute = pathname?.startsWith('/dashboard') || pathname?.startsWith('/admin') || pathname?.startsWith('/projects');
 
     return (
         <div
-            className={`transition-transform duration-300 ease-in-out ${isMenuOpen ? "translate-x-64" : "translate-x-0"} ${isNavbarHidden ? "" : "pt-20"}`}
+            className={`transition-transform duration-300 ease-in-out ${isMenuOpen && !isDashboardRoute ? "translate-x-64" : "translate-x-0"} ${isNavbarHidden ? "" : "pt-20"} ${isDashboardRoute ? "h-screen" : ""}`}
         >
             {/* Overlay to close menu when clicking outside on mobile */}
-            {isMenuOpen && (
+            {isMenuOpen && !isDashboardRoute && (
                 <div
                     onClick={closeMenu}
                     className="absolute inset-0 bg-black/20 z-[60] cursor-pointer"

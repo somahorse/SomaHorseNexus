@@ -86,7 +86,7 @@ export default function AdminDashboard() {
                 const clients = users.filter((u: any) => u.role === "client");
                 const oneWeekAgo = new Date();
                 oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-                const newThisWeek = users.filter((u: any) => 
+                const newThisWeek = users.filter((u: any) =>
                     u.createdAt && new Date(u.createdAt) > oneWeekAgo
                 ).length;
 
@@ -98,7 +98,7 @@ export default function AdminDashboard() {
                 });
 
                 // Calculate talent stats
-                const verified = talent.filter((t: any) => 
+                const verified = talent.filter((t: any) =>
                     t.aptitude?.passed === true && t.coding?.passed === true
                 ).length;
                 const suspended = talent.filter((t: any) => t.status === "suspended").length;
@@ -156,8 +156,8 @@ export default function AdminDashboard() {
     }
 
     const formatDate = (dateStr: string) => {
-        return new Date(dateStr).toLocaleDateString('en-US', { 
-            month: 'short', 
+        return new Date(dateStr).toLocaleDateString('en-US', {
+            month: 'short',
             day: 'numeric',
             hour: '2-digit',
             minute: '2-digit'
@@ -170,207 +170,210 @@ export default function AdminDashboard() {
 
             <main className="flex-1 lg:ml-72 overflow-y-auto">
                 <div className="p-4 lg:p-8 pt-20 lg:pt-8">
-                {/* Header */}
-                <div className="mb-8">
-                    <h1 className="text-2xl lg:text-3xl font-bold text-white mb-2">Admin Overview</h1>
-                    <p className="text-slate-400">Platform statistics and recent activity</p>
-                </div>
+                    {/* Header */}
+                    <div className="mb-8">
+                        <div className="flex items-center gap-3 mb-2">
+                            <h1 className="text-2xl lg:text-3xl font-bold text-white">Admin Overview</h1>
+                            <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full bg-gradient-to-r from-cyan-500 to-violet-600 text-white">
+                                Beta
+                            </span>
+                        </div>
+                        <p className="text-slate-400">Platform statistics and recent activity</p>
+                    </div>
 
-                {/* Stats Grid */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                    {/* Total Users */}
-                    <div className="relative group">
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-blue-600/5 rounded-2xl blur-xl group-hover:blur-2xl transition-all"></div>
-                        <div className="relative p-5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
-                            <div className="flex items-center justify-between mb-3">
-                                <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center">
+                    {/* Stats Grid */}
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                        {/* Total Users */}
+                        <div className="relative group">
+                            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-blue-600/5 rounded-2xl blur-xl group-hover:blur-2xl transition-all"></div>
+                            <div className="relative p-5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
+                                <div className="flex items-center justify-between mb-3">
+                                    <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center">
+                                        <Users size={20} className="text-blue-400" />
+                                    </div>
+                                    <span className="text-xs text-emerald-400 flex items-center gap-1">
+                                        <ArrowUpRight size={12} />
+                                        +{userStats.newThisWeek}
+                                    </span>
+                                </div>
+                                <p className="text-slate-400 text-xs font-medium mb-1">Total Users</p>
+                                <p className="text-2xl font-bold text-white">{userStats.total}</p>
+                            </div>
+                        </div>
+
+                        {/* Verified Talent */}
+                        <div className="relative group">
+                            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-emerald-600/5 rounded-2xl blur-xl group-hover:blur-2xl transition-all"></div>
+                            <div className="relative p-5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
+                                <div className="flex items-center justify-between mb-3">
+                                    <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center">
+                                        <UserCheck size={20} className="text-emerald-400" />
+                                    </div>
+                                    <span className="text-xs text-emerald-400 flex items-center gap-1">
+                                        <CheckCircle2 size={12} />
+                                        Verified
+                                    </span>
+                                </div>
+                                <p className="text-slate-400 text-xs font-medium mb-1">Verified Talent</p>
+                                <p className="text-2xl font-bold text-white">{talentStats.verified}</p>
+                            </div>
+                        </div>
+
+                        {/* Active Projects */}
+                        <div className="relative group">
+                            <div className="absolute inset-0 bg-gradient-to-br from-violet-500/20 to-violet-600/5 rounded-2xl blur-xl group-hover:blur-2xl transition-all"></div>
+                            <div className="relative p-5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
+                                <div className="flex items-center justify-between mb-3">
+                                    <div className="w-10 h-10 bg-violet-500/20 rounded-xl flex items-center justify-center">
+                                        <FolderKanban size={20} className="text-violet-400" />
+                                    </div>
+                                    <span className="text-xs text-amber-400 flex items-center gap-1">
+                                        <Clock size={12} />
+                                        {projectStats.pending} pending
+                                    </span>
+                                </div>
+                                <p className="text-slate-400 text-xs font-medium mb-1">Total Projects</p>
+                                <p className="text-2xl font-bold text-white">{projectStats.total}</p>
+                            </div>
+                        </div>
+
+                        {/* Pending Reviews */}
+                        <div className="relative group">
+                            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-amber-600/5 rounded-2xl blur-xl group-hover:blur-2xl transition-all"></div>
+                            <div className="relative p-5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
+                                <div className="flex items-center justify-between mb-3">
+                                    <div className="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center">
+                                        <AlertCircle size={20} className="text-amber-400" />
+                                    </div>
+                                    <span className="text-xs text-amber-400 flex items-center gap-1">
+                                        <Activity size={12} />
+                                        Action needed
+                                    </span>
+                                </div>
+                                <p className="text-slate-400 text-xs font-medium mb-1">Pending Talent</p>
+                                <p className="text-2xl font-bold text-white">{talentStats.pending}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Quick Stats Row */}
+                    <div className="grid grid-cols-3 gap-4 mb-8">
+                        <div className="p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl flex items-center gap-4">
+                            <div className="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center">
+                                <Zap size={24} className="text-cyan-400" />
+                            </div>
+                            <div>
+                                <p className="text-slate-400 text-xs">Talent Pool</p>
+                                <p className="text-xl font-bold text-white">{userStats.talent}</p>
+                            </div>
+                        </div>
+                        <div className="p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl flex items-center gap-4">
+                            <div className="w-12 h-12 bg-fuchsia-500/20 rounded-xl flex items-center justify-center">
+                                <Users size={24} className="text-fuchsia-400" />
+                            </div>
+                            <div>
+                                <p className="text-slate-400 text-xs">Clients</p>
+                                <p className="text-xl font-bold text-white">{userStats.clients}</p>
+                            </div>
+                        </div>
+                        <div className="p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl flex items-center gap-4">
+                            <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center">
+                                <XCircle size={24} className="text-red-400" />
+                            </div>
+                            <div>
+                                <p className="text-slate-400 text-xs">Suspended</p>
+                                <p className="text-xl font-bold text-white">{talentStats.suspended}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Recent Activity Grid */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* Recent Users */}
+                        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-lg font-bold text-white flex items-center gap-2">
                                     <Users size={20} className="text-blue-400" />
-                                </div>
-                                <span className="text-xs text-emerald-400 flex items-center gap-1">
-                                    <ArrowUpRight size={12} />
-                                    +{userStats.newThisWeek}
-                                </span>
+                                    Recent Users
+                                </h2>
+                                <Link href="/admin/users" className="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1">
+                                    View all <ArrowUpRight size={14} />
+                                </Link>
                             </div>
-                            <p className="text-slate-400 text-xs font-medium mb-1">Total Users</p>
-                            <p className="text-2xl font-bold text-white">{userStats.total}</p>
-                        </div>
-                    </div>
 
-                    {/* Verified Talent */}
-                    <div className="relative group">
-                        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-emerald-600/5 rounded-2xl blur-xl group-hover:blur-2xl transition-all"></div>
-                        <div className="relative p-5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
-                            <div className="flex items-center justify-between mb-3">
-                                <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center">
-                                    <UserCheck size={20} className="text-emerald-400" />
-                                </div>
-                                <span className="text-xs text-emerald-400 flex items-center gap-1">
-                                    <CheckCircle2 size={12} />
-                                    Verified
-                                </span>
-                            </div>
-                            <p className="text-slate-400 text-xs font-medium mb-1">Verified Talent</p>
-                            <p className="text-2xl font-bold text-white">{talentStats.verified}</p>
-                        </div>
-                    </div>
-
-                    {/* Active Projects */}
-                    <div className="relative group">
-                        <div className="absolute inset-0 bg-gradient-to-br from-violet-500/20 to-violet-600/5 rounded-2xl blur-xl group-hover:blur-2xl transition-all"></div>
-                        <div className="relative p-5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
-                            <div className="flex items-center justify-between mb-3">
-                                <div className="w-10 h-10 bg-violet-500/20 rounded-xl flex items-center justify-center">
-                                    <FolderKanban size={20} className="text-violet-400" />
-                                </div>
-                                <span className="text-xs text-amber-400 flex items-center gap-1">
-                                    <Clock size={12} />
-                                    {projectStats.pending} pending
-                                </span>
-                            </div>
-                            <p className="text-slate-400 text-xs font-medium mb-1">Total Projects</p>
-                            <p className="text-2xl font-bold text-white">{projectStats.total}</p>
-                        </div>
-                    </div>
-
-                    {/* Pending Reviews */}
-                    <div className="relative group">
-                        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-amber-600/5 rounded-2xl blur-xl group-hover:blur-2xl transition-all"></div>
-                        <div className="relative p-5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
-                            <div className="flex items-center justify-between mb-3">
-                                <div className="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center">
-                                    <AlertCircle size={20} className="text-amber-400" />
-                                </div>
-                                <span className="text-xs text-amber-400 flex items-center gap-1">
-                                    <Activity size={12} />
-                                    Action needed
-                                </span>
-                            </div>
-                            <p className="text-slate-400 text-xs font-medium mb-1">Pending Talent</p>
-                            <p className="text-2xl font-bold text-white">{talentStats.pending}</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Quick Stats Row */}
-                <div className="grid grid-cols-3 gap-4 mb-8">
-                    <div className="p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl flex items-center gap-4">
-                        <div className="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center">
-                            <Zap size={24} className="text-cyan-400" />
-                        </div>
-                        <div>
-                            <p className="text-slate-400 text-xs">Talent Pool</p>
-                            <p className="text-xl font-bold text-white">{userStats.talent}</p>
-                        </div>
-                    </div>
-                    <div className="p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl flex items-center gap-4">
-                        <div className="w-12 h-12 bg-fuchsia-500/20 rounded-xl flex items-center justify-center">
-                            <Users size={24} className="text-fuchsia-400" />
-                        </div>
-                        <div>
-                            <p className="text-slate-400 text-xs">Clients</p>
-                            <p className="text-xl font-bold text-white">{userStats.clients}</p>
-                        </div>
-                    </div>
-                    <div className="p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl flex items-center gap-4">
-                        <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center">
-                            <XCircle size={24} className="text-red-400" />
-                        </div>
-                        <div>
-                            <p className="text-slate-400 text-xs">Suspended</p>
-                            <p className="text-xl font-bold text-white">{talentStats.suspended}</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Recent Activity Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Recent Users */}
-                    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                                <Users size={20} className="text-blue-400" />
-                                Recent Users
-                            </h2>
-                            <Link href="/admin/users" className="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1">
-                                View all <ArrowUpRight size={14} />
-                            </Link>
-                        </div>
-
-                        <div className="space-y-3">
-                            {recentUsers.length === 0 ? (
-                                <p className="text-slate-500 text-sm text-center py-8">No users yet</p>
-                            ) : (
-                                recentUsers.map((u) => (
-                                    <div key={u.uid} className="flex items-center gap-3 p-3 bg-white/5 rounded-xl">
-                                        {u.photoURL ? (
-                                            <img src={u.photoURL} alt={u.displayName} className="w-10 h-10 rounded-lg object-cover" />
-                                        ) : (
-                                            <div className="w-10 h-10 bg-slate-700 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                                                {u.displayName?.charAt(0) || u.email?.charAt(0) || "?"}
+                            <div className="space-y-3">
+                                {recentUsers.length === 0 ? (
+                                    <p className="text-slate-500 text-sm text-center py-8">No users yet</p>
+                                ) : (
+                                    recentUsers.map((u) => (
+                                        <div key={u.uid} className="flex items-center gap-3 p-3 bg-white/5 rounded-xl">
+                                            {u.photoURL ? (
+                                                <img src={u.photoURL} alt={u.displayName} className="w-10 h-10 rounded-lg object-cover" />
+                                            ) : (
+                                                <div className="w-10 h-10 bg-slate-700 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                                                    {u.displayName?.charAt(0) || u.email?.charAt(0) || "?"}
+                                                </div>
+                                            )}
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-white text-sm font-medium truncate">{u.displayName || "No name"}</p>
+                                                <p className="text-slate-500 text-xs truncate">{u.email}</p>
                                             </div>
-                                        )}
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-white text-sm font-medium truncate">{u.displayName || "No name"}</p>
-                                            <p className="text-slate-500 text-xs truncate">{u.email}</p>
+                                            <div className="text-right">
+                                                <span className={`px-2 py-1 text-xs rounded-full ${u.role === "talent" ? "bg-cyan-500/20 text-cyan-400" :
+                                                        u.role === "client" ? "bg-violet-500/20 text-violet-400" :
+                                                            "bg-orange-500/20 text-orange-400"
+                                                    }`}>
+                                                    {u.role}
+                                                </span>
+                                                <p className="text-slate-500 text-xs mt-1">{formatDate(u.createdAt)}</p>
+                                            </div>
                                         </div>
-                                        <div className="text-right">
-                                            <span className={`px-2 py-1 text-xs rounded-full ${
-                                                u.role === "talent" ? "bg-cyan-500/20 text-cyan-400" :
-                                                u.role === "client" ? "bg-violet-500/20 text-violet-400" :
-                                                "bg-orange-500/20 text-orange-400"
-                                            }`}>
-                                                {u.role}
-                                            </span>
-                                            <p className="text-slate-500 text-xs mt-1">{formatDate(u.createdAt)}</p>
-                                        </div>
-                                    </div>
-                                ))
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Recent Projects */}
-                    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                                <FolderKanban size={20} className="text-violet-400" />
-                                Recent Projects
-                            </h2>
-                            <Link href="/admin/projects" className="text-sm text-violet-400 hover:text-violet-300 flex items-center gap-1">
-                                View all <ArrowUpRight size={14} />
-                            </Link>
+                                    ))
+                                )}
+                            </div>
                         </div>
 
-                        <div className="space-y-3">
-                            {recentProjects.length === 0 ? (
-                                <p className="text-slate-500 text-sm text-center py-8">No projects yet</p>
-                            ) : (
-                                recentProjects.map((p) => (
-                                    <div key={p.id} className="flex items-center gap-3 p-3 bg-white/5 rounded-xl">
-                                        <div className="w-10 h-10 bg-violet-500/20 rounded-lg flex items-center justify-center">
-                                            <FolderKanban size={18} className="text-violet-400" />
+                        {/* Recent Projects */}
+                        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                                    <FolderKanban size={20} className="text-violet-400" />
+                                    Recent Projects
+                                </h2>
+                                <Link href="/admin/projects" className="text-sm text-violet-400 hover:text-violet-300 flex items-center gap-1">
+                                    View all <ArrowUpRight size={14} />
+                                </Link>
+                            </div>
+
+                            <div className="space-y-3">
+                                {recentProjects.length === 0 ? (
+                                    <p className="text-slate-500 text-sm text-center py-8">No projects yet</p>
+                                ) : (
+                                    recentProjects.map((p) => (
+                                        <div key={p.id} className="flex items-center gap-3 p-3 bg-white/5 rounded-xl">
+                                            <div className="w-10 h-10 bg-violet-500/20 rounded-lg flex items-center justify-center">
+                                                <FolderKanban size={18} className="text-violet-400" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-white text-sm font-medium truncate">{p.solution || "AI Project"}</p>
+                                                <p className="text-slate-500 text-xs truncate">{p.clientEmail}</p>
+                                            </div>
+                                            <div className="text-right">
+                                                <span className={`px-2 py-1 text-xs rounded-full ${p.status === "pending" ? "bg-amber-500/20 text-amber-400" :
+                                                        p.status === "in_progress" ? "bg-blue-500/20 text-blue-400" :
+                                                            p.status === "completed" ? "bg-emerald-500/20 text-emerald-400" :
+                                                                "bg-slate-500/20 text-slate-400"
+                                                    }`}>
+                                                    {p.status}
+                                                </span>
+                                                <p className="text-slate-500 text-xs mt-1 capitalize">{p.tier}</p>
+                                            </div>
                                         </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-white text-sm font-medium truncate">{p.solution || "AI Project"}</p>
-                                            <p className="text-slate-500 text-xs truncate">{p.clientEmail}</p>
-                                        </div>
-                                        <div className="text-right">
-                                            <span className={`px-2 py-1 text-xs rounded-full ${
-                                                p.status === "pending" ? "bg-amber-500/20 text-amber-400" :
-                                                p.status === "in_progress" ? "bg-blue-500/20 text-blue-400" :
-                                                p.status === "completed" ? "bg-emerald-500/20 text-emerald-400" :
-                                                "bg-slate-500/20 text-slate-400"
-                                            }`}>
-                                                {p.status}
-                                            </span>
-                                            <p className="text-slate-500 text-xs mt-1 capitalize">{p.tier}</p>
-                                        </div>
-                                    </div>
-                                ))
-                            )}
+                                    ))
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
                 </div>
             </main>
         </div>

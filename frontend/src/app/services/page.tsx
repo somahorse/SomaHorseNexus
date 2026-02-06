@@ -193,7 +193,7 @@ export default function ServicesPage() {
       }
     >
       {/* Hero */}
-      <section className="relative overflow-hidden pt-32 pb-24 lg:pt-40 lg:pb-32">
+      <section className="relative overflow-hidden pt-12 pb-24 lg:pt-20 lg:pb-32">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute -top-16 left-1/2 h-72 w-[36rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,_rgba(79,70,229,0.28)_0%,_rgba(79,70,229,0)_68%)] blur-2xl" />
           <div className="absolute bottom-10 right-10 h-80 w-80 rounded-full bg-[radial-gradient(circle,_rgba(124,58,237,0.25)_0%,_rgba(124,58,237,0)_70%)] blur-2xl" />
@@ -417,9 +417,8 @@ export default function ServicesPage() {
       {isMounted &&
         createPortal(
           <div
-            className={`fixed inset-0 z-[999] transition-opacity duration-300 ${
-              isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
-            }`}
+            className={`fixed inset-0 z-[999] transition-opacity duration-300 ${isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+              }`}
           >
             <button
               type="button"
@@ -430,9 +429,8 @@ export default function ServicesPage() {
 
             {/* Desktop modal */}
             <div
-              className={`absolute left-1/2 top-1/2 hidden w-full max-w-3xl -translate-x-1/2 -translate-y-1/2 md:block transition-all duration-300 ${
-                isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
-              }`}
+              className={`absolute left-1/2 top-1/2 hidden w-full max-w-3xl -translate-x-1/2 -translate-y-1/2 md:block transition-all duration-300 ${isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
+                }`}
             >
               {activeService && (
                 <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-2xl">
@@ -497,9 +495,8 @@ export default function ServicesPage() {
 
             {/* Mobile bottom drawer */}
             <div
-              className={`absolute inset-x-0 bottom-0 block md:hidden transition-transform duration-300 ${
-                isOpen ? "translate-y-0" : "translate-y-full"
-              }`}
+              className={`absolute inset-x-0 bottom-0 block md:hidden transition-transform duration-300 ${isOpen ? "translate-y-0" : "translate-y-full"
+                }`}
               style={isOpen ? { transform: `translateY(${dragOffset}px)` } : undefined}
             >
               <div

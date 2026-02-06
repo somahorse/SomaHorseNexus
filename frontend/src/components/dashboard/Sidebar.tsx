@@ -19,6 +19,7 @@ import {
     X
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import NotificationBell from "@/components/notifications/NotificationBell";
 
 export default function Sidebar() {
     const pathname = usePathname();
@@ -44,34 +45,42 @@ export default function Sidebar() {
 
     const menuLinks = [
         { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-        { href: "/assessments", label: "Tasks", icon: CheckCircle2, badge: "2" },
-        { href: "/calendar", label: "Calendar", icon: Calendar },
-        { href: "/projects", label: "Analytics", icon: BarChart3 },
-        { href: "/team", label: "Team", icon: Users },
+        { href: "/dashboard/tasks", label: "Tasks", icon: CheckCircle2 },
+        { href: "/dashboard/calendar", label: "Calendar", icon: Calendar },
+        { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
+        { href: "/dashboard/team", label: "Team", icon: Users },
     ];
 
     const generalLinks = [
-        { href: "/settings", label: "Settings", icon: Settings },
-        { href: "/help", label: "Help", icon: HelpCircle },
+        { href: "/dashboard/settings", label: "Settings", icon: Settings },
+        { href: "/dashboard/help", label: "Help", icon: HelpCircle },
     ];
 
     const SidebarContent = () => (
         <div className="flex flex-col h-full bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border-r border-white/5">
 
-            {/* Logo */}
+            {/* Logo & Notifications */}
             <div className="p-6 pt-8">
-                <div className="flex items-center gap-3">
-                    <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-violet-600 shadow-lg shadow-cyan-500/20 overflow-hidden">
-                        <Image
-                            src="/somahorse-logo.png"
-                            alt="Somahorse Nexus logo"
-                            fill
-                            sizes="40px"
-                            className="object-contain p-1.5"
-                            priority
-                        />
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-violet-600 shadow-lg shadow-cyan-500/20 overflow-hidden">
+                            <Image
+                                src="/somahorse-logo.png"
+                                alt="Somahorse Nexus logo"
+                                fill
+                                sizes="40px"
+                                className="object-contain p-1.5"
+                                priority
+                            />
+                        </div>
+                        <span className="text-xl font-black text-white tracking-tight">Somahorse</span>
                     </div>
-                    <span className="text-xl font-black text-white tracking-tight">Somahorse</span>
+                    {user && (
+                        <NotificationBell
+                            userId={user.uid}
+                            userRole={((user as any)?.role === "client" ? "client" : "talent")}
+                        />
+                    )}
                 </div>
             </div>
 
@@ -82,23 +91,19 @@ export default function Sidebar() {
                     <div className="space-y-1">
                         {menuLinks.map((link) => {
                             const Icon = link.icon;
-                            const isActive = pathname === link.href || pathname?.startsWith(link.href + "/");
+                            // Only highlight exact match, not parent routes
+                            const isActive = pathname === link.href;
                             return (
                                 <Link
                                     key={link.href}
                                     href={link.href}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200 ${isActive
-                                            ? "bg-gradient-to-r from-cyan-500/20 to-violet-500/20 text-white shadow-sm border-l-4 border-cyan-500"
-                                            : "text-slate-400 hover:bg-white/5 hover:text-white"
+                                        ? "bg-gradient-to-r from-cyan-500/20 to-violet-500/20 text-white shadow-sm border-l-4 border-cyan-500"
+                                        : "text-slate-400 hover:bg-white/5 hover:text-white"
                                         }`}
                                 >
                                     <Icon size={20} className={isActive ? "text-cyan-400" : ""} />
                                     <span>{link.label}</span>
-                                    {link.badge && (
-                                        <span className="ml-auto px-2 py-0.5 text-xs font-bold bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-full">
-                                            {link.badge}
-                                        </span>
-                                    )}
                                 </Link>
                             );
                         })}
@@ -116,8 +121,8 @@ export default function Sidebar() {
                                     key={link.href}
                                     href={link.href}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200 ${isActive
-                                            ? "bg-gradient-to-r from-cyan-500/20 to-violet-500/20 text-white shadow-sm"
-                                            : "text-slate-400 hover:bg-white/5 hover:text-white"
+                                        ? "bg-gradient-to-r from-cyan-500/20 to-violet-500/20 text-white shadow-sm"
+                                        : "text-slate-400 hover:bg-white/5 hover:text-white"
                                         }`}
                                 >
                                     <Icon size={20} />
@@ -145,7 +150,7 @@ export default function Sidebar() {
             {/* Mobile Hamburger Button */}
             <button
                 onClick={() => setIsMobileOpen(true)}
-                className="lg:hidden fixed top-4 left-4 z-50 p-3 bg-white rounded-xl shadow-lg border border-slate-100 text-slate-700 hover:bg-slate-50 transition-colors"
+                className="lg:hidden fixed top-4 left-4 z-50 p-3 bg-slate-800/90 backdrop-blur-sm rounded-xl shadow-lg border border-white/10 text-white hover:bg-slate-700 transition-colors"
             >
                 <Menu size={24} />
             </button>
@@ -161,10 +166,10 @@ export default function Sidebar() {
             {/* Mobile Sidebar */}
             <aside className={`lg:hidden fixed top-0 left-0 h-screen w-72 z-50 transform transition-transform duration-300 ease-in-out ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'
                 }`}>
-                {/* Close Button */}
+                {/* Close Button - positioned on left to not block notification bell */}
                 <button
                     onClick={() => setIsMobileOpen(false)}
-                    className="absolute top-4 right-4 z-50 p-2 bg-white/80 backdrop-blur rounded-lg text-slate-700 hover:bg-white transition-colors"
+                    className="absolute top-6 left-4 z-[51] p-2 bg-white/10 backdrop-blur rounded-lg text-white hover:bg-white/20 transition-colors"
                 >
                     <X size={20} />
                 </button>

@@ -37,7 +37,7 @@ const industries: Industry[] = [
     title: "Fintech",
     summary:
       "Build secure, scalable financial infrastructure that unlocks access for consumers, SMEs, and enterprise partners.",
-    image: "/industries/fintech.svg",
+    image: "/industries/fintech.png",
     icon: BarChart3,
     focusAreas: ["Credit scoring", "Fraud detection", "Unified payments", "Compliance analytics"],
     solutions: [
@@ -54,7 +54,7 @@ const industries: Industry[] = [
     title: "AgriTech",
     summary:
       "Elevate agribusiness with data-driven yield optimization, pricing intelligence, and supply chain visibility.",
-    image: "/industries/agritech.svg",
+    image: "/industries/agritech.png",
     icon: Sparkles,
     focusAreas: ["Yield forecasting", "Market pricing", "Inventory visibility", "Farm-to-market logistics"],
     solutions: [
@@ -71,7 +71,7 @@ const industries: Industry[] = [
     title: "HealthTech",
     summary:
       "Improve patient outcomes and operational efficiency with AI-ready workflows for clinical and operational teams.",
-    image: "/industries/healthtech.svg",
+    image: "/industries/healthtech.png",
     icon: ShieldCheck,
     focusAreas: ["Triage support", "Care logistics", "Operational analytics", "Patient engagement"],
     solutions: [
@@ -88,7 +88,7 @@ const industries: Industry[] = [
     title: "Education",
     summary:
       "Enable personalized learning, workforce readiness, and data-driven oversight for education providers.",
-    image: "/industries/education.svg",
+    image: "/industries/education.png",
     icon: Target,
     focusAreas: ["Learning analytics", "Adaptive pathways", "Assessment insights", "Workforce readiness"],
     solutions: [
@@ -105,7 +105,7 @@ const industries: Industry[] = [
     title: "Manufacturing",
     summary:
       "Deliver predictive maintenance, quality control, and demand planning with integrated data workflows.",
-    image: "/industries/manufacturing.svg",
+    image: "/industries/manufacturing.png",
     icon: Factory,
     focusAreas: ["Predictive maintenance", "Quality control", "Demand planning", "Production analytics"],
     solutions: [
@@ -203,7 +203,7 @@ export default function IndustriesPage() {
       }
     >
       {/* Hero */}
-      <section className="relative overflow-hidden pt-32 pb-24 lg:pt-40 lg:pb-32">
+      <section className="relative overflow-hidden pt-12 pb-24 lg:pt-20 lg:pb-32">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute -top-16 left-1/2 h-72 w-[36rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,_rgba(79,70,229,0.28)_0%,_rgba(79,70,229,0)_68%)] blur-2xl" />
           <div className="absolute bottom-10 right-10 h-80 w-80 rounded-full bg-[radial-gradient(circle,_rgba(124,58,237,0.25)_0%,_rgba(124,58,237,0)_70%)] blur-2xl" />
@@ -253,48 +253,59 @@ export default function IndustriesPage() {
               Each industry gets a dedicated delivery playbook.
             </h2>
           </ScrollReveal>
-          <div className="mt-12 grid gap-6 lg:grid-cols-2">
+          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {industries.map((industry, index) => (
-              <ScrollReveal key={industry.id} delay={0.1 * index}>
-                <div className="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-                  <div className="relative h-52 w-full">
-                    <Image
-                      src={industry.image}
-                      alt={`${industry.title} illustration`}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      priority={index < 2}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent" />
+              <div
+                key={industry.id}
+                className="group relative h-[480px] overflow-hidden rounded-[2rem] shadow-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer animate-fadeInUp"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                {/* Background Image */}
+                <Image
+                  src={industry.image}
+                  alt={`${industry.title} illustration`}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  priority={index < 3}
+                />
+
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
+
+                {/* Content */}
+                <div className="absolute inset-0 flex flex-col justify-end p-6">
+                  {/* Title */}
+                  <h3 className="text-3xl font-bold text-white tracking-tight mb-3">
+                    {industry.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-sm text-white/80 leading-relaxed mb-5 line-clamp-3">
+                    {industry.summary}
+                  </p>
+
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-sm px-3 py-1.5 text-xs font-semibold text-white">
+                      <industry.icon size={12} />
+                      {industry.focusAreas[0]}
+                    </span>
+                    <span className="rounded-full bg-white/15 backdrop-blur-sm px-3 py-1.5 text-xs font-semibold text-white">
+                      {industry.focusAreas.length} Focus Areas
+                    </span>
                   </div>
-                  <div className="flex flex-1 flex-col p-7">
-                    <div className="flex items-center gap-3 text-sm font-semibold text-indigo-600">
-                      <industry.icon size={18} />
-                      {industry.title}
-                    </div>
-                    <p className="mt-4 text-sm text-slate-600 leading-relaxed">{industry.summary}</p>
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {industry.focusAreas.slice(0, 3).map((area) => (
-                        <span
-                          key={area}
-                          className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"
-                        >
-                          {area}
-                        </span>
-                      ))}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setActiveIndustry(industry)}
-                      className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 transition-colors hover:text-indigo-700"
-                    >
-                      View industry details
-                      <ChevronDown size={16} />
-                    </button>
-                  </div>
+
+                  {/* CTA Button */}
+                  <button
+                    type="button"
+                    onClick={() => setActiveIndustry(industry)}
+                    className="w-full rounded-full bg-white py-3.5 text-sm font-bold text-slate-900 shadow-lg transition-all duration-300 hover:bg-slate-100 hover:shadow-xl active:scale-[0.98]"
+                  >
+                    Explore {industry.title}
+                  </button>
                 </div>
-              </ScrollReveal>
+              </div>
             ))}
           </div>
         </div>
@@ -366,9 +377,8 @@ export default function IndustriesPage() {
       {isMounted &&
         createPortal(
           <div
-            className={`fixed inset-0 z-[999] transition-opacity duration-300 ${
-              isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
-            }`}
+            className={`fixed inset-0 z-[999] transition-opacity duration-300 ${isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+              }`}
           >
             <button
               type="button"
@@ -379,104 +389,112 @@ export default function IndustriesPage() {
 
             {/* Desktop modal */}
             <div
-              className={`absolute left-1/2 top-1/2 hidden w-full max-w-4xl -translate-x-1/2 -translate-y-1/2 md:block transition-all duration-300 ${
-                isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
-              }`}
+              className={`absolute left-1/2 top-1/2 hidden w-full max-w-4xl -translate-x-1/2 -translate-y-1/2 md:block transition-all duration-300 ${isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
+                }`}
             >
               {activeIndustry && (
-                <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-2xl">
-                  <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-center">
-                    <div className="relative h-56 w-full overflow-hidden rounded-2xl">
-                      <Image
-                        src={activeIndustry.image}
-                        alt={`${activeIndustry.title} illustration`}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 1024px) 100vw, 40vw"
-                      />
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Industry detail</p>
-                      <h3 className="mt-3 text-2xl font-bold text-slate-900">{activeIndustry.title}</h3>
-                      <p className="mt-3 text-sm text-slate-600 leading-relaxed">{activeIndustry.summary}</p>
-                      <button
-                        type="button"
-                        onClick={closeDrawer}
-                        className="mt-4 rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-50"
-                      >
-                        Close
-                      </button>
-                    </div>
-                  </div>
-                  <div className="mt-8 grid gap-6 lg:grid-cols-2">
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Focus areas</p>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {activeIndustry.focusAreas.map((item) => (
-                          <span
-                            key={item}
-                            className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"
-                          >
-                            {item}
-                          </span>
-                        ))}
-                      </div>
-                      <p className="mt-6 text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-                        Example solutions
-                      </p>
-                      <div className="mt-3 space-y-3 text-sm text-slate-700">
-                        {activeIndustry.solutions.map((item) => (
-                          <div key={item} className="flex items-start gap-2">
-                            <BadgeCheck size={16} className="mt-0.5 text-indigo-500" />
-                            <span>{item}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-                        Outcomes we track
-                      </p>
-                      <div className="mt-3 space-y-3 text-sm text-slate-700">
-                        {activeIndustry.outcomes.map((item) => (
-                          <div key={item} className="flex items-start gap-2">
-                            <BadgeCheck size={16} className="mt-0.5 text-indigo-500" />
-                            <span>{item}</span>
-                          </div>
-                        ))}
-                      </div>
-                      <p className="mt-6 text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-                        Impact signals
-                      </p>
-                      <div className="mt-3 space-y-3 text-sm text-slate-700">
-                        {activeIndustry.impact.map((item) => (
-                          <div key={item} className="flex items-start gap-2">
-                            <BadgeCheck size={16} className="mt-0.5 text-indigo-500" />
-                            <span>{item}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-8 flex flex-wrap items-center gap-3">
-                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-                      Blueprint-driven delivery
-                    </span>
-                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-                      Verified talent teams
-                    </span>
-                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-                      Live KPI tracking
-                    </span>
-                  </div>
-                  <div className="mt-6">
-                    <Link
-                      href="/contact"
-                      className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-700"
+                <div className="overflow-hidden rounded-[2rem] bg-white shadow-2xl">
+                  {/* Hero Section with Image */}
+                  <div className="relative h-64 w-full">
+                    <Image
+                      src={activeIndustry.image}
+                      alt={`${activeIndustry.title} illustration`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
+
+                    {/* Close button */}
+                    <button
+                      type="button"
+                      onClick={closeDrawer}
+                      className="absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors"
                     >
-                      Request this industry playbook
-                      <ArrowRight size={16} />
-                    </Link>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                    </button>
+
+                    {/* Title overlay */}
+                    <div className="absolute bottom-0 left-0 right-0 p-8">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-sm px-3 py-1.5 text-xs font-semibold text-white">
+                          <activeIndustry.icon size={12} />
+                          Industry Playbook
+                        </span>
+                      </div>
+                      <h3 className="text-4xl font-bold text-white tracking-tight">{activeIndustry.title}</h3>
+                      <p className="mt-2 text-sm text-white/80 max-w-xl">{activeIndustry.summary}</p>
+                    </div>
+                  </div>
+
+                  {/* Content Section */}
+                  <div className="p-8">
+                    {/* Focus Areas Tags */}
+                    <div className="flex flex-wrap gap-2 mb-8">
+                      {activeIndustry.focusAreas.map((item) => (
+                        <span
+                          key={item}
+                          className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700"
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Two Column Content */}
+                    <div className="grid gap-8 lg:grid-cols-2">
+                      <div>
+                        <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-400 mb-4">
+                          Example Solutions
+                        </h4>
+                        <div className="space-y-3">
+                          {activeIndustry.solutions.map((item) => (
+                            <div key={item} className="flex items-start gap-3 text-slate-700">
+                              <BadgeCheck size={18} className="mt-0.5 text-indigo-500 flex-shrink-0" />
+                              <span className="text-sm">{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-400 mb-4">
+                          Outcomes We Track
+                        </h4>
+                        <div className="space-y-3">
+                          {activeIndustry.outcomes.map((item) => (
+                            <div key={item} className="flex items-start gap-3 text-slate-700">
+                              <BadgeCheck size={18} className="mt-0.5 text-emerald-500 flex-shrink-0" />
+                              <span className="text-sm">{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-400 mt-6 mb-4">
+                          Impact Signals
+                        </h4>
+                        <div className="space-y-3">
+                          {activeIndustry.impact.map((item) => (
+                            <div key={item} className="flex items-start gap-3 text-slate-700">
+                              <BadgeCheck size={18} className="mt-0.5 text-violet-500 flex-shrink-0" />
+                              <span className="text-sm">{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* CTA Button */}
+                    <div className="mt-8 pt-6 border-t border-slate-100">
+                      <Link
+                        href="/contact"
+                        className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 py-4 text-sm font-bold text-white shadow-lg transition-all duration-300 hover:bg-slate-800 hover:shadow-xl"
+                      >
+                        Request {activeIndustry.title} Playbook
+                        <ArrowRight size={18} />
+                      </Link>
+                    </div>
                   </div>
                 </div>
               )}
@@ -484,50 +502,71 @@ export default function IndustriesPage() {
 
             {/* Mobile bottom drawer */}
             <div
-              className={`absolute inset-x-0 bottom-0 block md:hidden transition-transform duration-300 ${
-                isOpen ? "translate-y-0" : "translate-y-full"
-              }`}
+              className={`absolute inset-x-0 bottom-0 block md:hidden transition-transform duration-300 ${isOpen ? "translate-y-0" : "translate-y-full"
+                }`}
               style={isOpen ? { transform: `translateY(${dragOffset}px)` } : undefined}
             >
               <div
-                className="rounded-t-3xl border border-slate-200 bg-white p-6 shadow-2xl"
+                className="rounded-t-[2rem] bg-white shadow-2xl max-h-[85vh] overflow-y-auto"
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
               >
-                <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-slate-200" />
+                {/* Drag handle */}
+                <div className="sticky top-0 bg-white pt-4 pb-2">
+                  <div className="mx-auto h-1.5 w-12 rounded-full bg-slate-200" />
+                </div>
+
                 {activeIndustry && (
-                  <>
-                    <h3 className="text-xl font-bold text-slate-900">{activeIndustry.title}</h3>
-                    <p className="mt-3 text-sm text-slate-600">{activeIndustry.summary}</p>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {activeIndustry.focusAreas.slice(0, 3).map((item) => (
+                  <div className="px-6 pb-8">
+                    {/* Title Section */}
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700">
+                        <activeIndustry.icon size={12} />
+                        Industry Playbook
+                      </span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-slate-900 mb-3">{activeIndustry.title}</h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">{activeIndustry.summary}</p>
+
+                    {/* Tags */}
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {activeIndustry.focusAreas.map((item) => (
                         <span
                           key={item}
-                          className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"
+                          className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700"
                         >
                           {item}
                         </span>
                       ))}
                     </div>
-                    <div className="mt-5 space-y-3 text-sm text-slate-700">
-                      {activeIndustry.outcomes.slice(0, 2).map((item) => (
-                        <div key={item} className="flex items-start gap-2">
-                          <BadgeCheck size={16} className="mt-0.5 text-indigo-500" />
-                          <span>{item}</span>
-                        </div>
-                      ))}
+
+                    {/* Outcomes */}
+                    <div className="mt-6">
+                      <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-3">
+                        Outcomes We Track
+                      </h4>
+                      <div className="space-y-2">
+                        {activeIndustry.outcomes.map((item) => (
+                          <div key={item} className="flex items-start gap-2 text-slate-700">
+                            <BadgeCheck size={16} className="mt-0.5 text-emerald-500 flex-shrink-0" />
+                            <span className="text-sm">{item}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
+
+                    {/* CTA Button */}
                     <div className="mt-6">
                       <Link
                         href="/contact"
-                        className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-700"
+                        className="flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 py-4 text-sm font-bold text-white shadow-lg"
                       >
-                        Request this industry playbook
+                        Request {activeIndustry.title} Playbook
                         <ArrowRight size={16} />
                       </Link>
                     </div>
-                  </>
+                  </div>
                 )}
               </div>
             </div>

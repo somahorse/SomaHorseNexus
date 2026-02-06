@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Sidebar from "@/components/dashboard/Sidebar";
 import {
     Briefcase,
@@ -30,14 +30,63 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import { doc, getDoc } from "firebase/firestore";
+import Link from "next/link";
+import { doc, getDoc, collection, query, where, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+
+interface ProjectCollaboration {
+    _id: string;
+    project_id: string;
+    client_id: string;
+    client_name: string;
+    service_type: string;
+    tier: string;
+    estimated_duration_days: number;
+    deadline?: string;
+    assigned_talent: Array<{
+        talent_id: string;
+        talent_name: string;
+        skills_matched: string[];
+        match_score: number;
+        status: string;
+    }>;
+    overall_progress: number;
+    status: string;
+    created_at: string;
+}
+
+interface TalentNotification {
+    _id: string;
+    talent_id: string;
+    project_id: string;
+    collaboration_id: string;
+    type: string;
+    title: string;
+    message: string;
+    read: boolean;
+    created_at: string;
+}
 
 export default function DashboardPage() {
     const { user, loading, refreshUserData } = useAuth();
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [profileLoading, setProfileLoading] = useState(true);
     const [profile, setProfile] = useState<Record<string, unknown> | null>(null);
+    const [collaborations, setCollaborations] = useState<ProjectCollaboration[]>([]);
+    const [notifications, setNotifications] = useState<TalentNotification[]>([]);
+    const [showNewProjectSuccess, setShowNewProjectSuccess] = useState(false);
+
+    // Check for new project success param
+    useEffect(() => {
+        if (searchParams.get('newProject') === 'success') {
+            setShowNewProjectSuccess(true);
+            // Clear the URL param after showing
+            router.replace('/dashboard', { scroll: false });
+            // Auto-hide after 5 seconds
+            setTimeout(() => setShowNewProjectSuccess(false), 5000);
+        }
+    }, [searchParams, router]);
 
     useEffect(() => {
         const hydrateProfile = async () => {
@@ -66,6 +115,56 @@ export default function DashboardPage() {
         hydrateProfile();
     }, [user, refreshUserData]);
 
+    // Fetch collaborations for user
+    useEffect(() => {
+        if (!user) return;
+
+        const role = (profile as any)?.role || (user as any)?.role;
+
+        // Set up real-time listener for collaborations
+        const collabCollection = collection(db, "project_collaborations");
+
+        const unsubscribe = onSnapshot(collabCollection, (snapshot) => {
+            const collabs: ProjectCollaboration[] = [];
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+
+                // Filter based on role
+                if (role === "client" && data.client_id === user.uid) {
+                    collabs.push({ _id: doc.id, ...data } as ProjectCollaboration);
+                } else if (role === "talent") {
+                    // Check if talent is assigned to this project
+                    const isAssigned = data.assigned_talent?.some(
+                        (t: any) => t.talent_id === user.uid
+                    );
+                    if (isAssigned) {
+                        collabs.push({ _id: doc.id, ...data } as ProjectCollaboration);
+                    }
+                }
+            });
+            setCollaborations(collabs);
+        });
+
+        // Fetch notifications for talent
+        if (role === "talent") {
+            const notifQuery = query(
+                collection(db, "talent_notifications"),
+                where("talent_id", "==", user.uid)
+            );
+            getDocs(notifQuery).then((snapshot) => {
+                const notifs: TalentNotification[] = [];
+                snapshot.forEach((doc) => {
+                    notifs.push({ _id: doc.id, ...doc.data() } as TalentNotification);
+                });
+                setNotifications(notifs.sort((a, b) =>
+                    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+                ));
+            });
+        }
+
+        return () => unsubscribe();
+    }, [user, profile]);
+
     if (loading || profileLoading) return null;
 
     if (!user) {
@@ -87,10 +186,30 @@ export default function DashboardPage() {
         const memberSince = createdAt ? new Date(createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Jan 2025';
 
         return (
-            <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex overflow-hidden">
+            <div className="h-screen overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
                 <Sidebar />
 
-                <main className="flex-1 lg:ml-72 p-4 lg:p-8 pt-20 lg:pt-8 overflow-y-auto h-screen">
+                <main className="lg:ml-72 h-screen overflow-y-auto p-4 lg:p-8 pt-16 lg:pt-8">
+                    {/* New Project Success Notification */}
+                    {showNewProjectSuccess && (
+                        <div className="mb-6 p-4 bg-emerald-500/20 border border-emerald-500/30 rounded-2xl flex items-center gap-3">
+                            <CheckCircle2 className="text-emerald-400" size={24} />
+                            <div>
+                                <h4 className="text-white font-medium">Project Submitted Successfully!</h4>
+                                <p className="text-sm text-emerald-300/80">Your project is now pending admin review. You'll be notified when your team is assigned.</p>
+                            </div>
+                            <button
+                                onClick={() => setShowNewProjectSuccess(false)}
+                                className="ml-auto p-1 hover:bg-white/10 rounded-lg transition-colors"
+                            >
+                                <span className="sr-only">Dismiss</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-emerald-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    )}
+
                     {/* Top Header Bar */}
                     <div className="flex items-center justify-between mb-8 gap-4">
                         <div className="relative flex-1 max-w-md hidden sm:block">
@@ -103,13 +222,12 @@ export default function DashboardPage() {
                         </div>
 
                         <div className="flex items-center gap-3 ml-auto">
-                            <button className="p-2.5 rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all relative">
-                                <Bell size={18} />
-                                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-gradient-to-r from-cyan-400 to-violet-500 rounded-full border-2 border-slate-900"></span>
-                            </button>
-                            <button className="p-2.5 rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all">
+                            <Link
+                                href="/dashboard/settings"
+                                className="p-2.5 rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all"
+                            >
                                 <Settings size={18} />
-                            </button>
+                            </Link>
                         </div>
                     </div>
 
@@ -118,7 +236,7 @@ export default function DashboardPage() {
                         <div className="absolute inset-0 bg-gradient-to-r from-violet-500/20 via-fuchsia-500/20 to-cyan-500/20"></div>
                         <div className="absolute inset-0 bg-white/5 backdrop-blur-3xl"></div>
                         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-violet-400/30 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                        
+
                         <div className="relative p-6 lg:p-8 border border-white/10 rounded-3xl">
                             <div className="flex flex-col lg:flex-row lg:items-center gap-6">
                                 <div className="relative">
@@ -133,12 +251,15 @@ export default function DashboardPage() {
                                         <Briefcase size={14} className="text-white" />
                                     </div>
                                 </div>
-                                
+
                                 <div className="flex-1">
                                     <div className="flex flex-wrap items-center gap-3 mb-2">
                                         <h1 className="text-2xl lg:text-3xl font-bold text-white">Welcome, {displayName.split(' ')[0]}!</h1>
                                         <span className="px-3 py-1 bg-violet-500/20 text-violet-400 text-xs font-bold rounded-full border border-violet-500/30">
                                             Client
+                                        </span>
+                                        <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full bg-gradient-to-r from-cyan-500 to-violet-600 text-white">
+                                            Beta
                                         </span>
                                     </div>
                                     <p className="text-slate-400 mb-2">{email} • Member since {memberSince}</p>
@@ -151,40 +272,117 @@ export default function DashboardPage() {
                                 </div>
 
                                 <div className="flex gap-3">
-                                    <button className="px-5 py-2.5 bg-gradient-to-r from-violet-500 to-fuchsia-600 hover:from-violet-400 hover:to-fuchsia-500 text-white rounded-xl font-bold shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 transition-all flex items-center gap-2">
+                                    <Link
+                                        href="/dashboard/new-project"
+                                        className="px-5 py-2.5 bg-gradient-to-r from-violet-500 to-fuchsia-600 hover:from-violet-400 hover:to-fuchsia-500 text-white rounded-xl font-bold shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 transition-all flex items-center gap-2"
+                                    >
                                         <Plus size={18} />
                                         New Project
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Active Request Card */}
+                    {/* Active Projects / Collaborations */}
                     <div className="relative mb-8">
                         <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-3xl"></div>
                         <div className="relative p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl">
                             <div className="flex items-center justify-between mb-6">
                                 <h2 className="text-lg font-bold text-white flex items-center gap-2">
                                     <FileText size={20} className="text-cyan-400" />
-                                    Active Request
+                                    Your Projects
                                 </h2>
-                                {activeProjectId && (
-                                    <span className="px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-bold rounded-full border border-amber-500/30 flex items-center gap-1.5">
-                                        <CircleDot size={10} className="animate-pulse" />
-                                        Pending Review
+                                {collaborations.length > 0 && (
+                                    <span className="px-3 py-1 bg-cyan-500/20 text-cyan-400 text-xs font-bold rounded-full border border-cyan-500/30">
+                                        {collaborations.length} Active
                                     </span>
                                 )}
                             </div>
 
-                            {activeProjectId ? (
+                            {collaborations.length > 0 ? (
+                                <div className="space-y-4">
+                                    {collaborations.map((collab) => (
+                                        <Link
+                                            key={collab._id}
+                                            href={`/projects/${collab._id}`}
+                                            className="block p-4 bg-white/5 rounded-xl border border-white/10 hover:border-cyan-500/30 transition-all group"
+                                        >
+                                            <div className="flex items-center justify-between mb-3">
+                                                <h3 className="text-white font-semibold capitalize">
+                                                    {collab.service_type.replace("-", " ")} Project
+                                                </h3>
+                                                <span className={`px-2 py-1 text-xs font-bold rounded-full ${collab.status === "completed" ? "bg-emerald-500/20 text-emerald-400" :
+                                                    collab.status === "in_progress" ? "bg-cyan-500/20 text-cyan-400" :
+                                                        "bg-amber-500/20 text-amber-400"
+                                                    }`}>
+                                                    {collab.status.replace("_", " ").toUpperCase()}
+                                                </span>
+                                            </div>
+
+                                            {/* Progress Bar */}
+                                            <div className="mb-3">
+                                                <div className="flex justify-between text-xs mb-1">
+                                                    <span className="text-slate-400">Progress</span>
+                                                    <span className="text-white font-medium">{collab.overall_progress}%</span>
+                                                </div>
+                                                <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                                                    <div
+                                                        className="h-full bg-gradient-to-r from-cyan-500 to-violet-500 transition-all"
+                                                        style={{ width: `${collab.overall_progress}%` }}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            {/* Team */}
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-2">
+                                                    <Users size={14} className="text-slate-400" />
+                                                    <span className="text-slate-400 text-sm">
+                                                        {collab.assigned_talent.length} team member{collab.assigned_talent.length !== 1 ? "s" : ""}
+                                                    </span>
+                                                </div>
+                                                <div className="flex -space-x-2">
+                                                    {collab.assigned_talent.slice(0, 3).map((talent, i) => (
+                                                        <div
+                                                            key={i}
+                                                            className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold border-2 border-slate-800"
+                                                            title={talent.talent_name}
+                                                        >
+                                                            {talent.talent_name.charAt(0)}
+                                                        </div>
+                                                    ))}
+                                                    {collab.assigned_talent.length > 3 && (
+                                                        <div className="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-white text-xs border-2 border-slate-800">
+                                                            +{collab.assigned_talent.length - 3}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {/* Deadline */}
+                                            {collab.deadline && (
+                                                <div className="mt-3 pt-3 border-t border-white/10 flex items-center gap-2 text-sm">
+                                                    <Calendar size={14} className="text-amber-400" />
+                                                    <span className="text-slate-400">Deadline:</span>
+                                                    <span className="text-white">{new Date(collab.deadline).toLocaleDateString()}</span>
+                                                </div>
+                                            )}
+
+                                            <div className="mt-3 text-cyan-400 text-sm font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                View Project <ChevronRight size={16} />
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            ) : activeProjectId ? (
                                 <div className="space-y-4">
                                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                                         <div className="p-4 bg-white/5 rounded-xl">
                                             <p className="text-slate-500 text-xs mb-1">Status</p>
                                             <p className="text-amber-400 font-semibold flex items-center gap-2">
                                                 <Clock size={14} />
-                                                Pending Review
+                                                Matching Talent
                                             </p>
                                         </div>
                                         <div className="p-4 bg-white/5 rounded-xl">
@@ -201,7 +399,7 @@ export default function DashboardPage() {
                                         </div>
                                     </div>
                                     <p className="text-slate-400 text-sm">
-                                        Our team is reviewing your project request. You'll receive an update within 24-48 hours.
+                                        Our algorithm is matching you with the best talent. You'll be notified when your team is assembled.
                                     </p>
                                 </div>
                             ) : (
@@ -419,9 +617,9 @@ export default function DashboardPage() {
     // Locked State - Step 1 or Aptitude not completed
     if (onboardingStep <= 1 || !aptitudePassed) {
         return (
-            <div className="h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-white to-slate-100 flex">
+            <div className="h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-white to-slate-100">
                 <Sidebar />
-                <main className="flex-1 lg:ml-72 p-6 lg:p-8 pt-20 lg:pt-8 overflow-y-auto">
+                <main className="lg:ml-72 h-screen overflow-y-auto p-4 lg:p-8 pt-16 lg:pt-8">
                     <div className="max-w-4xl mx-auto">
                         <div className="bg-white rounded-3xl shadow-xl border border-slate-100 p-8 lg:p-12 text-center overflow-hidden relative">
                             {/* Decorative Gradient Top */}
@@ -439,7 +637,7 @@ export default function DashboardPage() {
                             <div className="flex flex-col sm:flex-row justify-center gap-4">
                                 {statusConfig.showAction && statusConfig.actionHref && (
                                     <button
-                                        onClick={() => router.push(statusConfig.actionHref)}
+                                        onClick={() => router.push(statusConfig.actionHref as string)}
                                         className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-violet-600 text-white font-bold rounded-xl shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:scale-105 transition-all"
                                     >
                                         {statusConfig.actionLabel}
@@ -488,9 +686,9 @@ export default function DashboardPage() {
     // Locked State - Coding Test Not Passed (but aptitude passed)
     if (!codingPassed || onboardingStep === 3) {
         return (
-            <div className="h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-white to-slate-100 flex">
+            <div className="h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-white to-slate-100">
                 <Sidebar />
-                <main className="flex-1 lg:ml-72 p-6 lg:p-8 pt-20 lg:pt-8 overflow-y-auto">
+                <main className="lg:ml-72 h-screen overflow-y-auto p-4 lg:p-8 pt-16 lg:pt-8">
                     <div className="max-w-4xl mx-auto">
                         <div className="bg-white rounded-3xl shadow-xl border border-slate-100 p-8 lg:p-12 text-center overflow-hidden relative">
                             {/* Decorative Gradient Top */}
@@ -508,7 +706,7 @@ export default function DashboardPage() {
                             <div className="flex flex-col sm:flex-row justify-center gap-4">
                                 {statusConfig.showAction && statusConfig.actionHref && (
                                     <button
-                                        onClick={() => router.push(statusConfig.actionHref)}
+                                        onClick={() => router.push(statusConfig.actionHref as string)}
                                         className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-violet-600 text-white font-bold rounded-xl shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:scale-105 transition-all"
                                     >
                                         {statusConfig.actionLabel}
@@ -571,10 +769,10 @@ export default function DashboardPage() {
 
     // Fully Verified Talent Dashboard
     return (
-        <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex overflow-hidden">
+        <div className="h-screen overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
             <Sidebar />
 
-            <main className="flex-1 lg:ml-72 p-4 lg:p-8 pt-20 lg:pt-8 overflow-y-auto h-screen">
+            <main className="lg:ml-72 h-screen overflow-y-auto p-4 lg:p-8 pt-16 lg:pt-8">
                 {/* Top Header Bar */}
                 <div className="flex items-center justify-between mb-8 gap-4">
                     <div className="relative flex-1 max-w-md hidden sm:block">
@@ -587,13 +785,12 @@ export default function DashboardPage() {
                     </div>
 
                     <div className="flex items-center gap-3 ml-auto">
-                        <button className="p-2.5 rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all relative">
-                            <Bell size={18} />
-                            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-gradient-to-r from-cyan-400 to-violet-500 rounded-full border-2 border-slate-900"></span>
-                        </button>
-                        <button className="p-2.5 rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all">
+                        <Link
+                            href="/dashboard/settings"
+                            className="p-2.5 rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all"
+                        >
                             <Settings size={18} />
-                        </button>
+                        </Link>
                     </div>
                 </div>
 
@@ -603,7 +800,7 @@ export default function DashboardPage() {
                     <div className="absolute inset-0 bg-white/5 backdrop-blur-3xl"></div>
                     <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-cyan-400/30 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-violet-500/30 to-transparent rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
-                    
+
                     <div className="relative p-6 lg:p-8 border border-white/10 rounded-3xl">
                         <div className="flex flex-col lg:flex-row lg:items-center gap-6">
                             <div className="relative">
@@ -618,7 +815,7 @@ export default function DashboardPage() {
                                     <CheckCircle2 size={16} className="text-white" />
                                 </div>
                             </div>
-                            
+
                             <div className="flex-1">
                                 <div className="flex flex-wrap items-center gap-3 mb-2">
                                     <h1 className="text-2xl lg:text-3xl font-bold text-white">Welcome back, {displayName.split(' ')[0]}!</h1>
@@ -626,9 +823,12 @@ export default function DashboardPage() {
                                         <CircleDot size={10} className="animate-pulse" />
                                         Verified & Active
                                     </span>
+                                    <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full bg-gradient-to-r from-cyan-500 to-violet-600 text-white">
+                                        Beta
+                                    </span>
                                 </div>
                                 <p className="text-slate-400 mb-4">{email} • Member since {memberSince}</p>
-                                
+
                                 <div className="flex flex-wrap gap-2">
                                     <span className="px-3 py-1.5 bg-white/5 backdrop-blur border border-white/10 rounded-xl text-xs text-slate-300 flex items-center gap-2">
                                         <Award size={14} className="text-cyan-400" />
@@ -646,10 +846,13 @@ export default function DashboardPage() {
                             </div>
 
                             <div className="flex gap-3">
-                                <button className="px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-white rounded-xl font-bold shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all flex items-center gap-2">
+                                <Link
+                                    href="/dashboard/browse-projects"
+                                    className="px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-white rounded-xl font-bold shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all flex items-center gap-2"
+                                >
                                     <Briefcase size={18} />
                                     Browse Projects
-                                </button>
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -726,7 +929,7 @@ export default function DashboardPage() {
                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
                     {/* Left Column - 2/3 */}
                     <div className="xl:col-span-2 space-y-6">
-                        {/* Available Projects Section */}
+                        {/* Assigned Projects Section */}
                         <div className="relative">
                             <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-3xl"></div>
                             <div className="relative p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl">
@@ -734,25 +937,118 @@ export default function DashboardPage() {
                                     <div>
                                         <h2 className="text-lg font-bold text-white flex items-center gap-2">
                                             <Briefcase size={20} className="text-cyan-400" />
-                                            Available Projects
+                                            Your Assigned Projects
                                         </h2>
-                                        <p className="text-slate-400 text-sm">AI solutions waiting for your expertise</p>
+                                        <p className="text-slate-400 text-sm">Projects you're working on</p>
                                     </div>
-                                    <button className="text-cyan-400 text-sm font-medium flex items-center gap-1 hover:text-cyan-300 transition-colors">
-                                        View All <ChevronRight size={16} />
-                                    </button>
+                                    {collaborations.length > 0 && (
+                                        <span className="px-3 py-1 bg-cyan-500/20 text-cyan-400 text-xs font-bold rounded-full">
+                                            {collaborations.length} Active
+                                        </span>
+                                    )}
                                 </div>
 
-                                {/* Empty State */}
-                                <div className="text-center py-12 border-2 border-dashed border-white/10 rounded-2xl">
-                                    <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                        <FileText size={28} className="text-slate-500" />
+                                {collaborations.length > 0 ? (
+                                    <div className="space-y-4">
+                                        {collaborations.map((collab) => {
+                                            const myAssignment = collab.assigned_talent.find(t => t.talent_id === user?.uid);
+                                            const isPending = myAssignment?.status === "pending";
+
+                                            return (
+                                                <Link
+                                                    key={collab._id}
+                                                    href={`/projects/${collab._id}`}
+                                                    className={`block p-4 rounded-xl border transition-all group ${isPending
+                                                        ? "bg-amber-500/10 border-amber-500/30 hover:border-amber-400"
+                                                        : "bg-white/5 border-white/10 hover:border-cyan-500/30"
+                                                        }`}
+                                                >
+                                                    {isPending && (
+                                                        <div className="flex items-center gap-2 mb-3 text-amber-400 text-sm font-medium">
+                                                            <Bell size={16} />
+                                                            Action Required: Accept Assignment
+                                                        </div>
+                                                    )}
+
+                                                    <div className="flex items-center justify-between mb-3">
+                                                        <h3 className="text-white font-semibold capitalize">
+                                                            {collab.service_type.replace("-", " ")} Project
+                                                        </h3>
+                                                        <span className={`px-2 py-1 text-xs font-bold rounded-full ${collab.status === "completed" ? "bg-emerald-500/20 text-emerald-400" :
+                                                            collab.status === "in_progress" ? "bg-cyan-500/20 text-cyan-400" :
+                                                                "bg-amber-500/20 text-amber-400"
+                                                            }`}>
+                                                            {collab.status.replace("_", " ").toUpperCase()}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className="flex items-center gap-4 text-sm text-slate-400 mb-3">
+                                                        <span className="flex items-center gap-1">
+                                                            <Users size={14} />
+                                                            Client: {collab.client_name}
+                                                        </span>
+                                                        <span className="capitalize px-2 py-0.5 bg-white/5 rounded text-xs">
+                                                            {collab.tier} tier
+                                                        </span>
+                                                    </div>
+
+                                                    {/* Progress Bar */}
+                                                    <div className="mb-3">
+                                                        <div className="flex justify-between text-xs mb-1">
+                                                            <span className="text-slate-400">Progress</span>
+                                                            <span className="text-white font-medium">{collab.overall_progress}%</span>
+                                                        </div>
+                                                        <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                                                            <div
+                                                                className="h-full bg-gradient-to-r from-cyan-500 to-violet-500 transition-all"
+                                                                style={{ width: `${collab.overall_progress}%` }}
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    {/* My Skills Matched */}
+                                                    {myAssignment && (
+                                                        <div className="flex flex-wrap gap-1 mb-3">
+                                                            {myAssignment.skills_matched.slice(0, 3).map((skill, i) => (
+                                                                <span key={i} className="px-2 py-0.5 bg-cyan-500/20 text-cyan-400 text-xs rounded">
+                                                                    {skill}
+                                                                </span>
+                                                            ))}
+                                                            {myAssignment.skills_matched.length > 3 && (
+                                                                <span className="px-2 py-0.5 bg-white/10 text-slate-400 text-xs rounded">
+                                                                    +{myAssignment.skills_matched.length - 3} more
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    )}
+
+                                                    {/* Deadline */}
+                                                    {collab.deadline && (
+                                                        <div className="flex items-center gap-2 text-sm">
+                                                            <Calendar size={14} className="text-amber-400" />
+                                                            <span className="text-slate-400">Deadline:</span>
+                                                            <span className="text-white">{new Date(collab.deadline).toLocaleDateString()}</span>
+                                                        </div>
+                                                    )}
+
+                                                    <div className="mt-3 text-cyan-400 text-sm font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        {isPending ? "Review & Accept" : "View Project"} <ChevronRight size={16} />
+                                                    </div>
+                                                </Link>
+                                            );
+                                        })}
                                     </div>
-                                    <h3 className="text-white font-semibold mb-2">No projects available yet</h3>
-                                    <p className="text-slate-400 text-sm max-w-sm mx-auto">
-                                        New AI projects from clients will appear here. Stay tuned for opportunities in Fintech, AgriTech, and more.
-                                    </p>
-                                </div>
+                                ) : (
+                                    <div className="text-center py-12 border-2 border-dashed border-white/10 rounded-2xl">
+                                        <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                            <FileText size={28} className="text-slate-500" />
+                                        </div>
+                                        <h3 className="text-white font-semibold mb-2">No projects assigned yet</h3>
+                                        <p className="text-slate-400 text-sm max-w-sm mx-auto">
+                                            When clients need your skills, you'll be automatically matched and notified here.
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         </div>
 

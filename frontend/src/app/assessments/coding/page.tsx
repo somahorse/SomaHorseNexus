@@ -373,7 +373,18 @@ export default function CodingTestPage() {
     if (cooldownInfo) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white flex items-center justify-center px-6">
-                <div className="max-w-xl w-full bg-slate-800/70 rounded-3xl shadow-2xl border border-slate-700/50 p-8 text-center">
+                <div className="max-w-xl w-full bg-slate-800/70 rounded-3xl shadow-2xl border border-slate-700/50 p-8 text-center relative">
+                    {/* Logout Button */}
+                    <div className="absolute top-6 right-6">
+                        <button
+                            onClick={handleLogout}
+                            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-300 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
+                        >
+                            <LogOut size={18} />
+                            <span>Logout</span>
+                        </button>
+                    </div>
+
                     <div className="w-16 h-16 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
                         <AlertTriangle className="text-amber-400" size={28} />
                     </div>
