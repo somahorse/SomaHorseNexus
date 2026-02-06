@@ -14,9 +14,9 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 
 interface UserData {
   uid: string;
-  email: string;
-  displayName: string;
-  photoURL?: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL?: string | null;
   role: "talent" | "client" | "admin";
   onboardingStep: number;
   aptitude?: {
@@ -40,9 +40,9 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
-  signInWithGoogle: async () => {},
-  logout: async () => {},
-  refreshUserData: async () => {},
+  signInWithGoogle: async () => { },
+  logout: async () => { },
+  refreshUserData: async () => { },
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -230,7 +230,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (isClientOnboardingRoute(currentPath)) {
         const currentStepMatch = currentPath.match(/step-(\d+)/);
         const currentStep = currentStepMatch ? parseInt(currentStepMatch[1]) : 1;
-        
+
         // Only allow current step or previous steps
         if (currentStep > clientOnboardingStep) {
           router.replace(clientDestination);
