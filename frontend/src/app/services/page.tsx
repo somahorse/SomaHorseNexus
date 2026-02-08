@@ -1,6 +1,6 @@
 "use client";
 
-import type { ComponentType, CSSProperties } from "react";
+import type { ComponentType } from "react";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
@@ -74,33 +74,33 @@ const services: Service[] = [
 const tiers = [
   {
     title: "Basic",
-    price: "Fast validation",
-    detail: "Rapid prototype, essential features, and a clear delivery roadmap.",
+    price: "From R10,000",
+    detail: "Rapid prototype for validation. Essential features, demo-ready outputs, and a clear delivery roadmap. Ideal for testing your concept before full integration.",
   },
   {
     title: "Standard",
-    price: "Production-ready",
-    detail: "Full solution build, QA cycles, and stakeholder reporting.",
+    price: "From R40,000",
+    detail: "Production-ready solution with live integrations, dashboards, and stakeholder reporting. Built for growing businesses needing real operational tools.",
   },
   {
     title: "Premium",
-    price: "Enterprise scale",
-    detail: "Advanced integrations, compliance support, and ongoing optimization.",
+    price: "From R120,000",
+    detail: "Enterprise-grade deployment with advanced integrations, compliance support, continuous optimisation, and dedicated project management.",
   },
 ];
 
 const fintechCatalog = [
   {
-    title: "Credit Scoring",
-    detail: "Alternative data models for SMEs and thin-file customers.",
+    title: "Credit Scoring Using Mobile Money Data",
+    detail: "Assesses creditworthiness using transaction history. From R25,000 (Basic) to R250,000 (Premium).",
   },
   {
-    title: "Fraud Detection",
-    detail: "Real-time anomaly detection for digital payments.",
+    title: "Real-Time Fraud Detection for Digital Payments",
+    detail: "Identifies and flags suspicious transactions instantly. From R30,000 (Basic) to R300,000 (Premium).",
   },
   {
     title: "Unified Payment Gateway",
-    detail: "Multi-rail orchestration with compliance-ready reporting.",
+    detail: "Accept multiple payment methods through one integration. From R20,000 (Basic) to R200,000 (Premium).",
   },
 ];
 
@@ -182,50 +182,40 @@ export default function ServicesPage() {
   const isOpen = Boolean(activeService);
 
   return (
-    <main
-      className="flex min-h-screen flex-col bg-white text-slate-900"
-      style={
-        {
-          "--nexus-primary": "#4f46e5",
-          "--nexus-secondary": "#7c3aed",
-          "--nexus-ink": "#0b1020",
-        } as CSSProperties
-      }
-    >
-      {/* Hero */}
-      <section className="relative overflow-hidden pt-12 pb-24 lg:pt-20 lg:pb-32">
+    <main className="flex min-h-screen flex-col bg-white text-slate-900">
+      {/* Hero — Dark immersive */}
+      <section className="relative overflow-hidden pt-16 pb-24 lg:pt-24 lg:pb-32 bg-slate-950">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-16 left-1/2 h-72 w-[36rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,_rgba(79,70,229,0.28)_0%,_rgba(79,70,229,0)_68%)] blur-2xl" />
-          <div className="absolute bottom-10 right-10 h-80 w-80 rounded-full bg-[radial-gradient(circle,_rgba(124,58,237,0.25)_0%,_rgba(124,58,237,0)_70%)] blur-2xl" />
-          <div className="absolute left-10 top-20 h-48 w-48 rounded-full bg-[radial-gradient(circle,_rgba(15,23,42,0.18)_0%,_rgba(15,23,42,0)_70%)] blur-2xl" />
+          <div className="absolute top-0 right-[15%] w-[500px] h-[500px] bg-violet-500/10 rounded-full blur-[140px]" />
+          <div className="absolute bottom-0 left-[10%] w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[120px]" />
         </div>
         <div className="container mx-auto px-6 relative z-10">
           <ScrollReveal direction="up" delay={0.1} className="flex flex-col items-center text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600 shadow-sm">
-              <Zap size={14} className="text-[var(--nexus-primary)]" />
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-300 mb-6">
+              <Zap size={14} className="text-cyan-400" />
               Services
             </div>
-            <h1 className="mt-6 text-4xl font-black tracking-tight text-slate-900 md:text-6xl lg:text-7xl">
-              We deliver verified talent, industry-grade solutions, and measurable impact.
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[var(--nexus-primary)] via-indigo-500 to-[var(--nexus-secondary)]">
-                Built for Africa&apos;s most ambitious teams.
+            <h1 className="text-4xl font-black tracking-tight text-white md:text-6xl lg:text-7xl leading-[0.95]">
+              Verified Talent.<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-500">
+                Industry-Grade Solutions.
               </span>
             </h1>
-            <p className="mt-6 max-w-3xl text-lg text-slate-600">
-              Somahorse Nexus is a vertically integrated operating system that transforms raw talent into deployable
+            <p className="mt-6 max-w-3xl text-lg text-slate-400">
+              A vertically integrated operating system that transforms raw talent into deployable
               teams and connects them to real industry problems with end-to-end delivery.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--nexus-ink)] px-8 py-4 text-sm font-bold text-white shadow-xl shadow-slate-900/20 transition-transform hover:scale-105"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 px-8 py-4 text-sm font-bold text-white shadow-xl shadow-cyan-500/20 transition-transform hover:scale-105"
               >
                 Request a proposal
                 <ArrowRight size={18} />
               </Link>
               <Link
                 href="/signup"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-8 py-4 text-sm font-bold text-slate-900 transition hover:bg-slate-50"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-white/5 border border-white/10 px-8 py-4 text-sm font-bold text-white transition hover:bg-white/10"
               >
                 Join as talent
               </Link>
@@ -235,10 +225,10 @@ export default function ServicesPage() {
       </section>
 
       {/* Services Grid */}
-      <section className="py-24 bg-slate-50">
+      <section className="py-24 bg-white">
         <div className="container mx-auto px-6">
           <ScrollReveal className="text-center max-w-3xl mx-auto">
-            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">Core services</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-cyan-600">Core services</p>
             <h2 className="mt-4 text-3xl font-bold text-slate-900 md:text-4xl">
               Three engines working together to deliver outcomes.
             </h2>
@@ -246,8 +236,8 @@ export default function ServicesPage() {
           <div className="mt-12 grid gap-6 lg:grid-cols-3">
             {services.map((service, index) => (
               <ScrollReveal key={service.id} delay={0.1 * index}>
-                <div className="group h-full rounded-3xl border border-slate-200 bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-900 text-white">
+                <div className="group h-full rounded-3xl border border-slate-200 bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-cyan-200">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500/10 to-violet-500/10 text-cyan-600 group-hover:from-cyan-500/20 group-hover:to-violet-500/20 transition-colors">
                     <service.icon size={22} />
                   </div>
                   <h3 className="mt-6 text-xl font-semibold text-slate-900">{service.title}</h3>
@@ -265,7 +255,7 @@ export default function ServicesPage() {
                   <button
                     type="button"
                     onClick={() => setActiveService(service)}
-                    className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 transition-colors hover:text-indigo-700"
+                    className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan-600 transition-colors hover:text-cyan-700"
                   >
                     View details
                     <ChevronDown size={16} />
@@ -278,21 +268,25 @@ export default function ServicesPage() {
       </section>
 
       {/* Engagement Tiers */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-6">
+      <section className="py-24 bg-slate-950 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-1/4 w-80 h-80 bg-cyan-500/8 rounded-full blur-[120px]" />
+          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-violet-500/8 rounded-full blur-[120px]" />
+        </div>
+        <div className="container mx-auto px-6 relative z-10">
           <ScrollReveal className="text-center max-w-3xl mx-auto">
-            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">Engagement tiers</p>
-            <h2 className="mt-4 text-3xl font-bold text-slate-900 md:text-4xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-cyan-400">Engagement tiers</p>
+            <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl">
               Choose the intensity that matches your roadmap.
             </h2>
           </ScrollReveal>
           <div className="mt-12 grid gap-6 lg:grid-cols-3">
             {tiers.map((tier, index) => (
               <ScrollReveal key={tier.title} delay={0.1 * index}>
-                <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 via-white to-slate-50 p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                  <h3 className="text-xl font-semibold text-slate-900">{tier.title}</h3>
-                  <p className="mt-2 text-sm font-semibold text-indigo-600">{tier.price}</p>
-                  <p className="mt-4 text-sm text-slate-600 leading-relaxed">{tier.detail}</p>
+                <div className="rounded-3xl bg-white/5 border border-white/10 p-7 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-500/30">
+                  <h3 className="text-xl font-semibold text-white">{tier.title}</h3>
+                  <p className="mt-2 text-sm font-semibold text-cyan-400">{tier.price}</p>
+                  <p className="mt-4 text-sm text-slate-400 leading-relaxed">{tier.detail}</p>
                 </div>
               </ScrollReveal>
             ))}
@@ -306,18 +300,18 @@ export default function ServicesPage() {
           <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
             <ScrollReveal direction="right">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">
+                <p className="text-sm font-semibold uppercase tracking-[0.35em] text-cyan-600">
                   Fintech blueprint catalog
                 </p>
                 <h2 className="mt-4 text-3xl font-bold text-slate-900 md:text-4xl">
                   Start with proven financial infrastructure.
                 </h2>
                 <p className="mt-4 text-base text-slate-600">
-                  These are structured solution pages with clear requirements, tier selection, and delivery artifacts.
+                  Structured solution pages with clear requirements, tier selection, and delivery artifacts.
                 </p>
                 <div className="mt-8 space-y-4">
                   {fintechCatalog.map((tool) => (
-                    <div key={tool.title} className="rounded-2xl border border-slate-200 bg-white p-5">
+                    <div key={tool.title} className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-cyan-200 hover:shadow-md transition-all">
                       <h3 className="text-base font-semibold text-slate-900">{tool.title}</h3>
                       <p className="mt-2 text-sm text-slate-600">{tool.detail}</p>
                     </div>
@@ -326,8 +320,8 @@ export default function ServicesPage() {
               </div>
             </ScrollReveal>
             <ScrollReveal direction="left" delay={0.2}>
-              <div className="rounded-3xl border border-slate-200 bg-slate-950 p-8 text-white shadow-xl">
-                <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.3em] text-indigo-300">
+              <div className="rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 p-8 text-white shadow-xl">
+                <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">
                   <BookOpen size={18} />
                   Blueprint highlights
                 </div>
@@ -340,7 +334,7 @@ export default function ServicesPage() {
                     "Compliance and security review pathway",
                   ].map((item) => (
                     <div key={item} className="flex items-start gap-3">
-                      <BadgeCheck size={18} className="mt-1 text-indigo-300" />
+                      <BadgeCheck size={18} className="mt-1 text-cyan-400" />
                       <span>{item}</span>
                     </div>
                   ))}
@@ -355,7 +349,7 @@ export default function ServicesPage() {
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6">
           <ScrollReveal className="text-center max-w-3xl mx-auto">
-            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">Delivery process</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-cyan-600">Delivery process</p>
             <h2 className="mt-4 text-3xl font-bold text-slate-900 md:text-4xl">
               A clear loop from discovery to impact.
             </h2>
@@ -363,8 +357,9 @@ export default function ServicesPage() {
           <div className="mt-12 grid gap-6 lg:grid-cols-4">
             {processSteps.map((step, index) => (
               <ScrollReveal key={step.title} delay={0.1 * index}>
-                <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-900 text-white">
+                <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-cyan-200">
+                  <div className="text-5xl font-black text-slate-100 mb-4">0{index + 1}</div>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500/10 to-violet-500/10 text-cyan-600">
                     <step.icon size={20} />
                   </div>
                   <h3 className="mt-5 text-lg font-semibold text-slate-900">{step.title}</h3>
@@ -377,35 +372,33 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-slate-50">
-        <div className="container mx-auto px-6">
-          <ScrollReveal className="rounded-3xl border border-slate-200 bg-[radial-gradient(circle_at_top,_rgba(79,70,229,0.2),_rgba(255,255,255,0.9))] p-10 text-center shadow-sm">
-            <div className="mx-auto flex max-w-3xl flex-col items-center">
-              <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
-                <Factory size={16} />
-                Build with Somahorse Nexus
-              </div>
-              <h2 className="mt-4 text-3xl font-bold text-slate-900 md:text-4xl">
-                Ready to deliver an industry-grade solution?
-              </h2>
-              <p className="mt-4 text-base text-slate-600">
-                We design the loop, assemble verified teams, and measure impact from day one.
-              </p>
-              <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--nexus-ink)] px-8 py-4 text-sm font-bold text-white shadow-lg shadow-slate-900/25 transition-transform hover:scale-105"
-                >
-                  Start a project
-                  <ArrowRight size={18} />
-                </Link>
-                <Link
-                  href="/signup"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 px-8 py-4 text-sm font-bold text-slate-900 transition hover:bg-slate-50"
-                >
-                  Join the talent pool
-                </Link>
-              </div>
+      <section className="py-24 bg-slate-950 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[150px]" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-[150px]" />
+        </div>
+        <div className="container mx-auto px-6 text-center relative z-10">
+          <ScrollReveal className="flex flex-col items-center">
+            <h2 className="text-3xl font-bold text-white md:text-4xl mb-4">
+              Ready to deliver an industry-grade solution?
+            </h2>
+            <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-8">
+              We design the loop, assemble verified teams, and measure impact from day one.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 px-8 py-4 text-sm font-bold text-white shadow-lg shadow-cyan-500/20 transition-transform hover:scale-105"
+              >
+                Start a project
+                <ArrowRight size={18} />
+              </Link>
+              <Link
+                href="/signup"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-white/5 border border-white/10 px-8 py-4 text-sm font-bold text-white transition hover:bg-white/10"
+              >
+                Join the talent pool
+              </Link>
             </div>
           </ScrollReveal>
         </div>

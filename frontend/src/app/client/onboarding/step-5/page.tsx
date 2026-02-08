@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { doc, getDoc, updateDoc, collection, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { getSolutionById, solutionLabels as solutionLabelMap } from "@/lib/solutions-data";
 import {
     ArrowRight,
     ArrowLeft,
@@ -22,17 +23,20 @@ import {
     FileText,
 } from "lucide-react";
 
-const solutionLabels: Record<string, { name: string; icon: any }> = {
+const solutionIcons: Record<string, { name: string; icon: any }> = {
     "credit-scoring": { name: "AI Credit Scoring", icon: CreditCard },
     "fraud-detection": { name: "Fraud Detection", icon: Shield },
     "payment-gateway": { name: "Unified Payment Gateway", icon: Banknote },
 };
 
-const tierLabels: Record<string, { name: string; icon: any; price: string }> = {
-    basic: { name: "Basic", icon: Zap, price: "R25,000" },
-    standard: { name: "Standard", icon: Crown, price: "R75,000" },
-    premium: { name: "Premium", icon: Rocket, price: "R150,000+" },
-};
+function getTierLabels(solutionId: string | undefined): Record<string, { name: string; icon: any; price: string }> {
+    const solution = solutionId ? getSolutionById(solutionId) : null;
+    return {
+        basic: { name: "Basic", icon: Zap, price: solution?.tiers.basic.price || "R25,000" },
+        standard: { name: "Standard", icon: Crown, price: solution?.tiers.standard.price || "R80,000" },
+        premium: { name: "Premium", icon: Rocket, price: solution?.tiers.premium.price || "R250,000" },
+    };
+}
 
 const urgencyLabels: Record<string, string> = {
     low: "Low - 3+ months",
@@ -115,7 +119,8 @@ export default function ClientOnboardingStep5() {
         );
     }
 
-    const solution = solutionLabels[projectData?.selectedSolution] || { name: "Unknown", icon: FileText };
+    const solution = solutionIcons[projectData?.selectedSolution] || { name: solutionLabelMap[projectData?.selectedSolution] || "Unknown", icon: FileText };
+    const tierLabels = getTierLabels(projectData?.selectedSolution);
     const tier = tierLabels[projectData?.selectedTier] || { name: "Unknown", icon: Zap, price: "TBD" };
     const SolutionIcon = solution.icon;
     const TierIcon = tier.icon;

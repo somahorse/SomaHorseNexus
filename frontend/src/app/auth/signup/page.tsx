@@ -3,21 +3,69 @@
 import { useSearchParams } from "next/navigation";
 import { useState, Suspense } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 function AuthPageContent() {
     const searchParams = useSearchParams();
     const role = (searchParams.get("role") as "client" | "talent") || "talent";
-    const { signInWithGoogle } = useAuth();
+    const { signInWithGoogle, signUpWithEmail } = useAuth();
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [googleLoading, setGoogleLoading] = useState(false);
 
-    // Placeholder for Email Signup logic
-    const handleSignupSubmit = (e: React.FormEvent) => {
+    const handleSignupSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        alert("Email signup implementation pending.");
+        setError("");
+
+        if (password.length < 6) {
+            setError("Password must be at least 6 characters long.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            setError("Passwords do not match.");
+            return;
+        }
+
+        setLoading(true);
+        try {
+            await signUpWithEmail(name, email, password, role);
+        } catch (err: any) {
+            const code = err?.code || "";
+            if (code === "auth/email-already-in-use") {
+                setError("An account with this email already exists. Try logging in instead.");
+            } else if (code === "auth/weak-password") {
+                setError("Password is too weak. Use at least 6 characters.");
+            } else if (code === "auth/invalid-email") {
+                setError("Please enter a valid email address.");
+            } else {
+                setError("Something went wrong. Please try again.");
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleGoogleSignUp = async () => {
+        setGoogleLoading(true);
+        setError("");
+        try {
+            await signInWithGoogle(role);
+        } catch (err: any) {
+            if (err?.code !== "auth/popup-closed-by-user") {
+                setError("Google sign-up failed. Please try again.");
+            }
+        } finally {
+            setGoogleLoading(false);
+        }
     };
 
     return (
@@ -38,14 +86,28 @@ function AuthPageContent() {
                     </p>
                 </div>
 
+                {error && (
+                    <div className="rounded-lg bg-red-50 border border-red-200 p-4 text-sm text-red-700 flex items-start gap-2">
+                        <span className="shrink-0 mt-0.5">⚠</span>
+                        <span>{error}</span>
+                    </div>
+                )}
+
                 <div className="mt-8 space-y-6">
                     {/* Google Button - At the top */}
                     <button
-                        onClick={() => signInWithGoogle(role)}
-                        className="flex w-full items-center justify-center gap-3 rounded-full border border-slate-300 bg-white px-4 py-3 text-slate-700 shadow-sm hover:bg-slate-50 transition-all hover:shadow-md"
+                        onClick={handleGoogleSignUp}
+                        disabled={googleLoading}
+                        className="flex w-full items-center justify-center gap-3 rounded-full border border-slate-300 bg-white px-4 py-3 text-slate-700 shadow-sm hover:bg-slate-50 transition-all hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed"
                     >
-                        <img src="https://www.google.com/favicon.ico" alt="Google" className="h-5 w-5" />
-                        <span className="font-semibold">Continue with Google</span>
+                        {googleLoading ? (
+                            <Loader2 size={20} className="animate-spin" />
+                        ) : (
+                            <img src="https://www.google.com/favicon.ico" alt="Google" className="h-5 w-5" />
+                        )}
+                        <span className="font-semibold">
+                            {googleLoading ? "Connecting..." : "Continue with Google"}
+                        </span>
                     </button>
 
                     {/* Divider */}
@@ -62,12 +124,30 @@ function AuthPageContent() {
                     <form className="space-y-4" onSubmit={handleSignupSubmit}>
                         <div>
                             <label htmlFor="name" className="block text-sm font-medium text-slate-700">Full Name</label>
-                            <input id="name" name="name" type="text" required className="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm px-4 py-2 border" placeholder="John Doe" />
+                            <input
+                                id="name"
+                                name="name"
+                                type="text"
+                                required
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm px-4 py-2 border"
+                                placeholder="John Doe"
+                            />
                         </div>
 
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-slate-700">Email address</label>
-                            <input id="email" name="email" type="email" required className="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm px-4 py-2 border" placeholder="you@example.com" />
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm px-4 py-2 border"
+                                placeholder="you@example.com"
+                            />
                         </div>
 
                         <div>
@@ -78,6 +158,8 @@ function AuthPageContent() {
                                     name="password"
                                     type={showPassword ? "text" : "password"}
                                     required
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     className="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm px-4 py-2 border pr-10"
                                     placeholder="••••••••"
                                 />
@@ -95,6 +177,8 @@ function AuthPageContent() {
                                     name="confirmPassword"
                                     type={showConfirmPassword ? "text" : "password"}
                                     required
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
                                     className="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm px-4 py-2 border pr-10"
                                     placeholder="••••••••"
                                 />
@@ -117,8 +201,13 @@ function AuthPageContent() {
                             </label>
                         </div>
 
-                        <button type="submit" className="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transition-transform transform hover:scale-[1.02]">
-                            Create Account
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transition-transform transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                        >
+                            {loading && <Loader2 size={18} className="animate-spin" />}
+                            {loading ? "Creating Account..." : "Create Account"}
                         </button>
                     </form>
 

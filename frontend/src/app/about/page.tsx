@@ -56,32 +56,32 @@ const systemPillars = [
 
 const workingLoop = [
   "Talent signs up and completes a streamlined assessment.",
-  "Client selects a tool (Credit Scoring, Fraud Detection, or Unified Payments) and submits a request.",
+  "Client selects a solution from our catalog (Fintech, Agriculture, Healthcare, Education, or Manufacturing) and submits a request.",
   "Admin matches verified talent to the project.",
   "Talent submits a delivery artifact; client reviews and approves.",
   "Payment is recorded with a 60/40 split and dashboards update in real time.",
 ];
 
 const industries = [
-  { title: "Fintech", detail: "Credit scoring, fraud detection, and payments infrastructure." },
-  { title: "AgriTech", detail: "Yield optimization, supply chain visibility, and pricing intelligence." },
-  { title: "HealthTech", detail: "Triage support, operational analytics, and care logistics." },
-  { title: "Education", detail: "Learning analytics, adaptive pathways, and workforce readiness." },
-  { title: "Manufacturing", detail: "Predictive maintenance, quality control, and demand planning." },
+  { title: "Fintech", detail: "Credit scoring, fraud detection, and unified payment gateway solutions." },
+  { title: "Agriculture", detail: "Crop disease scanning, farmer-to-buyer marketplaces, and precision farming." },
+  { title: "Healthcare", detail: "Telemedicine, AI diagnostic assistants, and drug inventory tracking." },
+  { title: "Education", detail: "Adaptive learning platforms, skills training apps, and school management." },
+  { title: "Manufacturing", detail: "Production monitoring, predictive maintenance, and supply chain tracking." },
 ];
 
 const fintechTools = [
   {
-    title: "Credit Scoring",
-    detail: "Alternative data models for thin-file customers and SME underwriting.",
+    title: "Credit Scoring Using Mobile Money Data",
+    detail: "Assesses creditworthiness using transaction history. Basic R25,000 · Standard R80,000 · Premium R250,000.",
   },
   {
-    title: "Fraud Detection",
-    detail: "Real-time anomaly detection for digital payments and onboarding flows.",
+    title: "Real-Time Fraud Detection",
+    detail: "Identifies and flags suspicious transactions instantly. Basic R30,000 · Standard R100,000 · Premium R300,000.",
   },
   {
     title: "Unified Payment Gateway",
-    detail: "Multi-rail payments orchestration with compliance-ready reporting.",
+    detail: "Accept multiple payment methods through one integration. Basic R20,000 · Standard R70,000 · Premium R200,000.",
   },
 ];
 
@@ -195,7 +195,7 @@ export default function AboutPage() {
               {[
                 { value: "60/40", label: "Revenue Split", icon: TrendingUp },
                 { value: "5+", label: "Industries", icon: Globe },
-                { value: "3", label: "AI Tools", icon: Cpu },
+                { value: "15", label: "AI Solutions", icon: Cpu },
                 { value: "100%", label: "South African", icon: Award },
               ].map((stat) => (
                 <div key={stat.label} className="flex items-center gap-3">

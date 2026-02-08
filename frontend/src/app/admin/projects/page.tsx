@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import { collection, getDocs, doc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { getSolutionTierPrice } from "@/lib/solutions-data";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import {
     FolderKanban,
@@ -51,10 +52,10 @@ const solutionLabels: Record<string, string> = {
     "payment-gateway": "Unified Payment Gateway",
 };
 
-const tierConfig: Record<string, { label: string; icon: any; price: string; color: string }> = {
-    basic: { label: "Basic", icon: Zap, price: "R25,000", color: "cyan" },
-    standard: { label: "Standard", icon: Crown, price: "R75,000", color: "violet" },
-    premium: { label: "Premium", icon: Rocket, price: "R150,000+", color: "emerald" },
+const tierConfig: Record<string, { label: string; icon: any; color: string }> = {
+    basic: { label: "Basic", icon: Zap, color: "cyan" },
+    standard: { label: "Standard", icon: Crown, color: "violet" },
+    premium: { label: "Premium", icon: Rocket, color: "emerald" },
 };
 
 export default function AdminProjectsPage() {
@@ -332,7 +333,7 @@ export default function AdminProjectsPage() {
                                                 tier.color === "violet" ? "bg-violet-500/20 text-violet-400" :
                                                 "bg-emerald-500/20 text-emerald-400"
                                             }`}>
-                                                {tier.label} • {tier.price}
+                                                {tier.label} • {getSolutionTierPrice(project.solution, project.tier as "basic" | "standard" | "premium")}
                                             </div>
 
                                             {/* Status Badge */}
@@ -450,7 +451,7 @@ export default function AdminProjectsPage() {
                                         }`}>
                                             {tierConfig[selectedProject.tier]?.label} Tier
                                         </span>
-                                        <span className="text-white font-semibold">{tierConfig[selectedProject.tier]?.price}</span>
+                                        <span className="text-white font-semibold">{getSolutionTierPrice(selectedProject.solution, selectedProject.tier as "basic" | "standard" | "premium")}</span>
                                     </div>
                                 </div>
 

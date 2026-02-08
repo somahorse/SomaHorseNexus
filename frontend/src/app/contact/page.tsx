@@ -1,262 +1,316 @@
 "use client";
 
-import type { CSSProperties } from "react";
 import Link from "next/link";
+import { useState } from "react";
+import { collection, addDoc, doc, setDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import {
-  ArrowRight,
-  BadgeCheck,
+  ArrowLeft,
+  Send,
   Mail,
   MapPin,
-  Phone,
-  Sparkles,
+  MessageSquare,
+  Clock,
+  Globe,
+  Building2,
+  Zap,
+  Users,
+  CheckCircle,
+  Loader2,
 } from "lucide-react";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import Footer from "@/components/Footer";
 
 const focusAreas = [
-  "Fintech infrastructure",
-  "AgriTech intelligence",
-  "HealthTech operations",
-  "Education analytics",
-  "Manufacturing automation",
+  {
+    icon: Zap,
+    title: "AI Solution Request",
+    type: "ai-solution",
+    description: "Get a custom AI solution built by our verified talent pool.",
+  },
+  {
+    icon: Users,
+    title: "Talent Partnership",
+    type: "talent-partnership",
+    description: "Explore our developer network for your team's needs.",
+  },
+  {
+    icon: Building2,
+    title: "Enterprise Inquiry",
+    type: "enterprise",
+    description: "Discuss large-scale AI integration for your organization.",
+  },
+  {
+    icon: Globe,
+    title: "General Inquiry",
+    type: "general",
+    description: "Have a question? We'd love to hear from you.",
+  },
 ];
 
 const engagementSteps = [
-  {
-    title: "Share your goal",
-    detail: "Tell us the industry, challenge, and desired outcome.",
-  },
-  {
-    title: "Select a tier",
-    detail: "Choose Basic, Standard, or Premium delivery.",
-  },
-  {
-    title: "Get a roadmap",
-    detail: "We respond with a verified team and milestone plan.",
-  },
+  { step: "01", title: "Submit Request", description: "Fill out the form with your project details." },
+  { step: "02", title: "Consultation", description: "Our team reviews and schedules a discovery call." },
+  { step: "03", title: "Proposal", description: "Receive a tailored proposal with timeline and pricing." },
+  { step: "04", title: "Launch", description: "We match talent and kick off your project." },
 ];
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    subject: "",
+    message: "",
+    type: "general",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      // Save message to Firestore
+      const msgRef = await addDoc(collection(db, "contact_messages"), {
+        ...formData,
+        read: false,
+        createdAt: new Date().toISOString(),
+      });
+
+      // Create a notification for admin
+      await addDoc(collection(db, "notifications"), {
+        type: "contact_message",
+        title: "New Contact Message",
+        message: `${formData.name} sent a message: "${formData.subject}"`,
+        read: false,
+        createdAt: new Date().toISOString(),
+        link: "/admin/messages",
+        senderEmail: formData.email,
+        senderName: formData.name,
+        messageId: msgRef.id,
+      });
+
+      setIsSubmitted(true);
+      setFormData({ name: "", email: "", company: "", subject: "", message: "", type: "general" });
+    } catch (error) {
+      console.error("Error sending message:", error);
+      alert("Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <main
-      className="flex min-h-screen flex-col bg-white text-slate-900"
-      style={
-        {
-          "--nexus-primary": "#4f46e5",
-          "--nexus-secondary": "#7c3aed",
-          "--nexus-ink": "#0b1020",
-        } as CSSProperties
-      }
-    >
-      {/* Hero */}
-      <section className="relative overflow-hidden pt-12 pb-24 lg:pt-20 lg:pb-32">
+    <main className="flex min-h-screen flex-col bg-white">
+      {/* Hero Section */}
+      <section className="relative pt-16 pb-20 lg:pt-24 lg:pb-32 bg-slate-950 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-16 left-1/2 h-72 w-[36rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,_rgba(79,70,229,0.28)_0%,_rgba(79,70,229,0)_68%)] blur-2xl" />
-          <div className="absolute bottom-10 right-10 h-80 w-80 rounded-full bg-[radial-gradient(circle,_rgba(124,58,237,0.25)_0%,_rgba(124,58,237,0)_70%)] blur-2xl" />
-          <div className="absolute left-10 top-20 h-48 w-48 rounded-full bg-[radial-gradient(circle,_rgba(15,23,42,0.18)_0%,_rgba(15,23,42,0)_70%)] blur-2xl" />
+          <div className="absolute top-0 right-[10%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px]" />
+          <div className="absolute bottom-0 left-[10%] w-[400px] h-[400px] bg-violet-500/10 rounded-full blur-[120px]" />
         </div>
         <div className="container mx-auto px-6 relative z-10">
-          <ScrollReveal direction="up" delay={0.1} className="flex flex-col items-center text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600 shadow-sm">
-              <Sparkles size={14} className="text-[var(--nexus-primary)]" />
-              Contact
+          <Link href="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-white mb-8 transition-colors">
+            <ArrowLeft size={18} />
+            Back to Home
+          </Link>
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6">
+              <MessageSquare size={16} className="text-cyan-400" />
+              <span className="text-sm font-semibold text-slate-300">Get in Touch</span>
             </div>
-            <h1 className="mt-6 text-4xl font-black tracking-tight text-slate-900 md:text-6xl lg:text-7xl">
-              Let&apos;s build the delivery loop for your industry.
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[var(--nexus-primary)] via-indigo-500 to-[var(--nexus-secondary)]">
-                Start a conversation with Somahorse Nexus.
-              </span>
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+              Let&apos;s Build <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-500">Together</span>
             </h1>
-            <p className="mt-6 max-w-3xl text-lg text-slate-600">
-              Tell us what you&apos;re aiming to deliver. We&apos;ll align on scope, match verified talent, and share a
-              milestone-driven roadmap.
+            <p className="text-xl text-slate-400 max-w-2xl">
+              Whether you need AI talent, want to explore our solutions, or have a partnership idea — we&apos;re here to help.
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
-              <Link
-                href="/services"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--nexus-ink)] px-8 py-4 text-sm font-bold text-white shadow-xl shadow-slate-900/20 transition-transform hover:scale-105"
-              >
-                View services
-                <ArrowRight size={18} />
-              </Link>
-              <Link
-                href="/industries"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-8 py-4 text-sm font-bold text-slate-900 transition hover:bg-slate-50"
-              >
-                Explore industries
-              </Link>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* Contact Form */}
-      <section className="py-24 bg-slate-50">
-        <div className="container mx-auto px-6">
-          <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
-            <ScrollReveal direction="right">
-              <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-                <h2 className="text-2xl font-bold text-slate-900">Request a proposal</h2>
-                <p className="mt-2 text-sm text-slate-600">
-                  Share a few details and we&apos;ll follow up with a tailored plan.
-                </p>
-                <form className="mt-8 grid gap-6">
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <label className="text-sm font-semibold text-slate-700">
-                      Full name
-                      <input
-                        type="text"
-                        placeholder="Your name"
-                        className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-700 shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-                      />
-                    </label>
-                    <label className="text-sm font-semibold text-slate-700">
-                      Work email
-                      <input
-                        type="email"
-                        placeholder="you@company.com"
-                        className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-700 shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-                      />
-                    </label>
-                  </div>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <label className="text-sm font-semibold text-slate-700">
-                      Organization
-                      <input
-                        type="text"
-                        placeholder="Company name"
-                        className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-700 shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-                      />
-                    </label>
-                    <label className="text-sm font-semibold text-slate-700">
-                      Industry
-                      <select className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100">
-                        <option>Fintech</option>
-                        <option>AgriTech</option>
-                        <option>HealthTech</option>
-                        <option>Education</option>
-                        <option>Manufacturing</option>
-                        <option>Other</option>
-                      </select>
-                    </label>
-                  </div>
-                  <label className="text-sm font-semibold text-slate-700">
-                    Project goal
-                    <textarea
-                      rows={5}
-                      placeholder="Describe the challenge you want to solve and the outcome you need."
-                      className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-700 shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-                    />
-                  </label>
-                  <button
-                    type="button"
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--nexus-ink)] px-8 py-4 text-sm font-bold text-white shadow-lg shadow-slate-900/25 transition-transform hover:scale-105"
-                  >
-                    Submit request
-                    <ArrowRight size={18} />
-                  </button>
-                </form>
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal direction="left" delay={0.15}>
-              <div className="space-y-6">
-                <div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm">
-                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Focus industries</p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {focusAreas.map((item) => (
-                      <span
-                        key={item}
-                        className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"
-                      >
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="mt-4 text-sm text-slate-600">
-                    We start with a blueprint and customize delivery to your region, market, and data readiness.
-                  </p>
-                </div>
-
-                <div className="rounded-3xl border border-slate-200 bg-slate-950 p-7 text-white shadow-xl">
-                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-indigo-300">
-                    <BadgeCheck size={16} />
-                    Engagement flow
-                  </div>
-                  <div className="mt-5 space-y-4">
-                    {engagementSteps.map((step, index) => (
-                      <div key={step.title} className="flex items-start gap-3 text-sm text-slate-200">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-xs font-semibold text-white">
-                          {index + 1}
-                        </div>
-                        <div>
-                          <p className="font-semibold text-white">{step.title}</p>
-                          <p className="text-xs text-slate-300">{step.detail}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm">
-                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Contact details</p>
-                  <div className="mt-4 space-y-4 text-sm text-slate-700">
-                    <div className="flex items-center gap-3">
-                      <Mail size={18} className="text-indigo-600" />
-                      hello@somahorse.ai
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Phone size={18} className="text-indigo-600" />
-                      +27 (0) 10 123 4567
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <MapPin size={18} className="text-indigo-600" />
-                      Johannesburg, South Africa
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </ScrollReveal>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-24 bg-white">
+      {/* Focus Areas */}
+      <section className="py-12 bg-white border-b border-slate-100">
         <div className="container mx-auto px-6">
-          <ScrollReveal className="rounded-3xl border border-slate-200 bg-[radial-gradient(circle_at_top,_rgba(79,70,229,0.2),_rgba(255,255,255,0.9))] p-10 text-center shadow-sm">
-            <div className="mx-auto flex max-w-3xl flex-col items-center">
-              <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
-                <BadgeCheck size={16} />
-                Verified delivery
+          <div className="grid md:grid-cols-4 gap-4">
+            {focusAreas.map((area) => (
+              <button
+                key={area.type}
+                onClick={() => setFormData({ ...formData, type: area.type })}
+                className={`text-left p-5 rounded-2xl border transition-all hover:-translate-y-1 duration-300 ${
+                  formData.type === area.type
+                    ? "bg-cyan-50 border-cyan-200 shadow-lg shadow-cyan-100"
+                    : "bg-white border-slate-200 hover:border-cyan-200 hover:shadow-lg"
+                }`}
+              >
+                <area.icon size={24} className={`mb-3 ${
+                  formData.type === area.type ? "text-cyan-600" : "text-slate-400"
+                }`} />
+                <h3 className="text-sm font-bold text-slate-900 mb-1">{area.title}</h3>
+                <p className="text-xs text-slate-500">{area.description}</p>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Form & Contact Details */}
+      <section className="py-16 bg-slate-50">
+        <div className="container mx-auto px-6">
+          <div className="grid lg:grid-cols-5 gap-10">
+            {/* Form */}
+            <div className="lg:col-span-3">
+              {isSubmitted ? (
+                <div className="bg-white rounded-3xl shadow-xl p-12 border border-slate-100 text-center">
+                  <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle size={40} className="text-emerald-500" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-slate-900 mb-3">Message Sent!</h2>
+                  <p className="text-slate-600 mb-8 max-w-md mx-auto">
+                    Thank you for reaching out. Our team will review your message and get back to you within 24 hours.
+                  </p>
+                  <button
+                    onClick={() => setIsSubmitted(false)}
+                    className="px-6 py-3 bg-slate-100 text-slate-700 font-semibold rounded-xl hover:bg-slate-200 transition-colors"
+                  >
+                    Send Another Message
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-xl p-8 border border-slate-100">
+                  <h2 className="text-2xl font-bold text-slate-900 mb-6">Send Us a Message</h2>
+                  <div className="grid md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Full Name *</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all text-slate-900"
+                        placeholder="John Doe"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Email Address *</label>
+                      <input
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all text-slate-900"
+                        placeholder="john@company.com"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Company</label>
+                      <input
+                        type="text"
+                        value={formData.company}
+                        onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all text-slate-900"
+                        placeholder="Company Inc."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Subject *</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.subject}
+                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all text-slate-900"
+                        placeholder="Project inquiry"
+                      />
+                    </div>
+                  </div>
+                  <div className="mb-6">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">Message *</label>
+                    <textarea
+                      required
+                      rows={5}
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all resize-none text-slate-900"
+                      placeholder="Tell us about your project or inquiry..."
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-cyan-500/30 transition-all hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 size={20} className="animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send size={20} />
+                        Send Message
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
+            </div>
+
+            {/* Contact Details */}
+            <div className="lg:col-span-2 space-y-6">
+              <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
+                <h3 className="text-xl font-bold text-slate-900 mb-6">Contact Details</h3>
+                <div className="space-y-5">
+                  <ContactItem icon={Mail} label="Email" value="info@somahorse.ai" href="mailto:info@somahorse.ai" />
+                  <ContactItem icon={MapPin} label="Headquarters" value="Johannesburg, South Africa" />
+                  <ContactItem icon={Clock} label="Response Time" value="Within 24 hours" />
+                  <ContactItem icon={Globe} label="Coverage" value="Pan-African, Global Reach" />
+                </div>
               </div>
-              <h2 className="mt-4 text-3xl font-bold text-slate-900 md:text-4xl">
-                Let&apos;s align on a delivery timeline that works.
-              </h2>
-              <p className="mt-4 text-base text-slate-600">
-                We respond quickly with a tailored plan, scope, and delivery team options.
-              </p>
-              <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
-                <Link
-                  href="/services"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--nexus-ink)] px-8 py-4 text-sm font-bold text-white shadow-lg shadow-slate-900/25 transition-transform hover:scale-105"
-                >
-                  View service tiers
-                  <ArrowRight size={18} />
-                </Link>
-                <Link
-                  href="/signup"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 px-8 py-4 text-sm font-bold text-slate-900 transition hover:bg-slate-50"
-                >
-                  Join as talent
-                </Link>
+
+              {/* Engagement Process */}
+              <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 text-white">
+                <h3 className="text-xl font-bold mb-6">How We Engage</h3>
+                <div className="space-y-5">
+                  {engagementSteps.map((step) => (
+                    <div key={step.step} className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 to-violet-500/20 flex items-center justify-center text-cyan-400 font-bold text-sm shrink-0">
+                        {step.step}
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-white mb-1">{step.title}</h4>
+                        <p className="text-sm text-slate-400">{step.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </ScrollReveal>
+          </div>
         </div>
       </section>
 
       <Footer />
     </main>
+  );
+}
+
+function ContactItem({ icon: Icon, label, value, href }: { icon: any; label: string; value: string; href?: string }) {
+  return (
+    <div className="flex items-center gap-4">
+      <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center">
+        <Icon size={22} className="text-cyan-600" />
+      </div>
+      <div>
+        <p className="text-sm text-slate-500">{label}</p>
+        {href ? (
+          <a href={href} className="text-slate-900 font-semibold hover:text-cyan-600 transition-colors">{value}</a>
+        ) : (
+          <p className="text-slate-900 font-semibold">{value}</p>
+        )}
+      </div>
+    </div>
   );
 }

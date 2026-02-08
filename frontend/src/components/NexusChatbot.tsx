@@ -3,7 +3,29 @@
 import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, Sparkles, Loader2, ChessKnight } from "lucide-react";
+import { X, Send, Sparkles, Loader2, MessageCircle } from "lucide-react";
+
+// Custom Horse SVG icon (Lucide doesn't have one)
+function HorseIcon({ size = 16, className = "" }: { size?: number; className?: string }) {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={className}
+        >
+            <path d="M22 2L17 7l-2-2-5 5c-1.5-1-3.5-1.5-5.5-.5L3 11l4 4-2 4 4-2 4 4 1.5-1.5c1-2-.5-4-1.5-5.5l5-5-2-2 5-5z" />
+            <path d="M7 17l-3 3" />
+            <path d="M17 7l1 1" />
+        </svg>
+    );
+}
 
 interface Message {
     id: string;
@@ -12,74 +34,40 @@ interface Message {
     timestamp: Date;
 }
 
-const SYSTEM_CONTEXT = `You are Nexus, the friendly and knowledgeable AI assistant for Somahorse Nexus - Africa's AI Talent Operating System. You have a warm, professional personality and are passionate about connecting African tech talent with industry opportunities.
+const SYSTEM_CONTEXT = `You are Nexus, the AI assistant for Somahorse Nexus — Africa's AI Talent Operating System.
 
-ABOUT SOMAHORSE NEXUS:
-Somahorse Nexus is an integrated system that transforms raw technical talent into verified, deployable skill through real deliverables, matches verified talent to real industry problems, and delivers complete AI/software solutions end-to-end.
+IMPORTANT RESPONSE RULES:
+- Keep responses MEDIUM length (4-8 sentences). Provide enough detail to be helpful but stay focused.
+- Use bold (**text**) to highlight key terms and important words.
+- Break longer info into short bullet points when helpful.
+- Be warm, confident, and knowledgeable.
+- Use 1-2 emojis max per response for personality.
+- If someone asks about a specific topic, give a thorough but organized answer.
 
-THREE CORE COMPONENTS:
+PLATFORM OVERVIEW:
+Somahorse Nexus connects verified African AI talent with global businesses. Three pillars:
+1. **Talent Foundry** — Developers apply → pass assessments → get verified → matched to real projects
+2. **Industrial Solutions Hub** — Businesses pick AI solutions across 5 sectors, choose a tier (Basic/Standard/Premium), get matched with verified devs
+3. **Capital Dashboard** — Tracks ROI, earnings, completion rates
 
-1. TALENT FOUNDRY
-- Purpose: Turn potential into verified skill
-- Flow: Developer applies → Assessment gates entry → Completes real project deliverables → Verification by outcomes → Creates verifiable portfolio
-- Assessment includes aptitude tests and coding challenges
-- Produces certified, AI-ready talent pool
+PAYMENT: **60/40 split** (developer gets 60%, platform 40%). Example: A Standard Tier project at R100,000 — developers earn R60,000, platform earns R40,000.
 
-2. INDUSTRIAL SOLUTIONS HUB  
-- Purpose: Deliver AI solutions to businesses
-- Client selects from catalog of AI blueprints/tools
-- Three service tiers: Basic, Standard, Premium
-- Platform matches projects to verified developer teams
-- Manages initiation → delivery → approval → payment
-- Current Focus Industries: Fintech (Credit Scoring, Fraud Detection, Unified Payment Gateway), with AgriTech, HealthTech, Education, Manufacturing coming soon
+SECTORS & SOLUTIONS (15 total):
+- **Fintech**: Credit Scoring (R25k–R250k), Fraud Detection (R30k–R300k), Unified Payment Gateway (R20k–R200k)
+- **Agriculture**: Crop Disease Scanner (R15k–R150k), Farmer-to-Buyer Marketplace (R20k–R180k), Precision Farming (R25k–R220k)
+- **Healthcare**: Telemedicine (R25k–R250k), AI Diagnostic Assistant (R30k–R300k), Drug Inventory Tracking (R20k–R220k)
+- **Education**: Adaptive Learning (R15k–R150k), Skills Training App (R10k–R120k), School Management (R12k–R130k)
+- **Manufacturing**: Production Monitoring (R25k–R250k), Predictive Maintenance (R30k–R280k), Supply Chain Tracking (R20k–R220k)
 
-3. CAPITAL & IMPACT DASHBOARD
-- Purpose: Show measurable outcomes and ecosystem health
-- Tracks: Developer earnings, Client efficiency gains/ROI, Completion rates, Revenue metrics, Ecosystem health KPIs
+TIERS: Basic (prototype/validation), Standard (production-ready with integrations), Premium (enterprise-grade with compliance and advanced features).
 
-PAYMENT MODEL:
-- 60% goes to developers
-- 40% goes to platform
-- Transparent and fair revenue sharing
+All engagements include a dedicated project lead, verified AI delivery team, deployment support, and post-launch validation.
 
-USER TYPES:
-- Talent (developers, designers, AI engineers) - Join to get assessed, verified, and matched with real projects
-- Clients (businesses, partners) - Browse AI tools, request projects, get matched with verified talent
-- Public visitors - Learn about the platform
+MISSION: Design, build and deploy tailored AI solutions for Africa's key sectors.
 
-KEY VALUE PROPOSITIONS:
-- For Talent: Real project experience, verification through deliverables (not just certificates), fair earnings, portfolio building
-- For Clients: Access to verified AI talent, end-to-end project management, catalog of ready AI solutions, ROI tracking
+For detailed pricing or to discuss which solution and tier fit your needs, direct users to the /contact page or email somahorsenexus@gmail.com.`;
 
-OUR TEAM:
-- Uchenna Ngubane (South Africa) - Founder & CEO
-- Sorotiah Mazando (Zimbabwe) - Chief Technology Officer  
-- Nokwazi Xaba (South Africa) - Chief Product Officer
-- Nkululeko Menziwa (South Africa) - Head of Sales and Outreach
-- Nkosinathi Ngwenya (South Africa) - Full Stack Developer
-- Salami Abiodun (Nigeria) - Full Stack Developer
-- Chizua Akabike (Nigeria) - Head of Nigerian Operations
-- Mohamed Massoud (Egypt) - Full Stack Developer
-
-MISSION:
-Africa's greatest asset is its young, growing population. Our purpose is to convert this potential into progress. We build the infrastructure that connects Africa's technical talent with the complex challenges faced by its most important industries, creating a new engine for economic growth.
-
-SUCCESS METRICS:
-We measure success by functional solutions and commercial readiness, not certificates.
-
-GUIDELINES FOR RESPONSES:
-- Be helpful, friendly, and encouraging
-- Answer questions about the platform, how to join, services offered
-- Guide talent on how to sign up and get assessed
-- Guide clients on how to request AI solutions
-- Explain the verification process and why it matters
-- Highlight the fair 60/40 payment split for developers
-- Be concise but thorough
-- Use emojis sparingly to add warmth
-- If asked about something outside your knowledge, politely redirect to contacting the team
-- Never make up information about specific pricing or timelines - suggest contacting the team for details`;
-
-// Routes where chatbot should be hidden (not marketing pages)
+// Routes where chatbot should be hidden
 const HIDDEN_ROUTES = [
     "/dashboard",
     "/admin",
@@ -97,7 +85,7 @@ export default function NexusChatbot() {
         {
             id: "welcome",
             role: "assistant",
-            content: "Hey there! 👋 I'm Nexus, your guide to Somahorse Nexus - Africa's AI Talent Operating System. Whether you're a developer looking to join our verified talent pool or a business seeking AI solutions, I'm here to help! What would you like to know?",
+            content: "Hey! I'm **Nexus**, your guide to Somahorse Nexus. Whether you're a **developer** looking to get verified and matched to real projects, or a **business** searching for top **AI talent** — I'm here to help. Ask me anything about the platform, services, or how to get started!",
             timestamp: new Date(),
         },
     ]);
@@ -119,6 +107,17 @@ export default function NexusChatbot() {
             inputRef.current.focus();
         }
     }, [isOpen]);
+
+    // Format message content: bold **text** and line breaks
+    const formatMessage = (text: string) => {
+        const parts = text.split(/(\*\*.*?\*\*)/g);
+        return parts.map((part, i) => {
+            if (part.startsWith("**") && part.endsWith("**")) {
+                return <strong key={i} className="text-cyan-300 font-semibold">{part.slice(2, -2)}</strong>;
+            }
+            return <span key={i}>{part}</span>;
+        });
+    };
 
     const sendMessage = async () => {
         if (!input.trim() || isLoading) return;
@@ -158,7 +157,7 @@ export default function NexusChatbot() {
             const assistantMessage: Message = {
                 id: (Date.now() + 1).toString(),
                 role: "assistant",
-                content: data.response || "I apologize, but I couldn't process that. Could you try rephrasing your question?",
+                content: data.response || "Hmm, couldn't process that. Try rephrasing?",
                 timestamp: new Date(),
             };
 
@@ -168,7 +167,7 @@ export default function NexusChatbot() {
             const errorMessage: Message = {
                 id: (Date.now() + 1).toString(),
                 role: "assistant",
-                content: "I'm having trouble connecting right now. Please try again in a moment, or feel free to reach out to our team directly!",
+                content: "Connection issue — try again shortly or reach out at **/contact**!",
                 timestamp: new Date(),
             };
             setMessages((prev) => [...prev, errorMessage]);
@@ -200,15 +199,14 @@ export default function NexusChatbot() {
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setIsOpen(true)}
-                        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-br from-orange-500 to-amber-600 rounded-full shadow-2xl flex items-center justify-center group cursor-pointer"
+                        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-br from-cyan-500 to-violet-600 rounded-full shadow-2xl shadow-cyan-500/25 flex items-center justify-center group cursor-pointer"
                     >
-                        {/* Horse Avatar */}
                         <div className="relative">
-                            <span className="text-3xl"><ChessKnight /></span>
+                            <HorseIcon size={24} className="text-white" />
                             <motion.div
                                 animate={{ scale: [1, 1.2, 1] }}
                                 transition={{ repeat: Infinity, duration: 2 }}
-                                className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white"
+                                className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border-2 border-white"
                             />
                         </div>
                         
@@ -231,25 +229,28 @@ export default function NexusChatbot() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className="fixed bottom-6 right-6 z-50 w-[calc(100vw-3rem)] sm:w-[400px] h-[600px] max-h-[calc(100vh-3rem)] bg-slate-900 rounded-2xl shadow-2xl border border-white/10 flex flex-col overflow-hidden"
+                        className="fixed bottom-6 right-6 z-50 w-[calc(100vw-3rem)] sm:w-[400px] h-[600px] max-h-[calc(100vh-3rem)] bg-slate-950 rounded-2xl shadow-2xl shadow-cyan-500/10 border border-white/10 flex flex-col overflow-hidden"
                     >
                         {/* Header */}
-                        <div className="bg-gradient-to-r from-orange-500 to-amber-600 p-4 flex items-center justify-between shrink-0">
+                        <div className="bg-gradient-to-r from-cyan-600 to-violet-600 p-4 flex items-center justify-between shrink-0">
                             <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                                    <span className="text-2xl"><ChessKnight /></span>
+                                <div className="w-11 h-11 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                                    <HorseIcon size={20} className="text-white" />
                                 </div>
                                 <div>
                                     <h3 className="text-white font-bold text-lg flex items-center gap-2">
                                         Nexus
-                                        <Sparkles size={16} className="text-yellow-200" />
+                                        <Sparkles size={14} className="text-cyan-200" />
                                     </h3>
-                                    <p className="text-white/80 text-sm">AI Assistant</p>
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
+                                        <p className="text-white/70 text-xs">Online</p>
+                                    </div>
                                 </div>
                             </div>
                             <button
                                 onClick={() => setIsOpen(false)}
-                                className="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors cursor-pointer"
+                                className="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors cursor-pointer"
                             >
                                 <X size={18} className="text-white" />
                             </button>
@@ -266,25 +267,27 @@ export default function NexusChatbot() {
                                 >
                                     <div className={`flex items-start gap-2 max-w-[85%] ${message.role === "user" ? "flex-row-reverse" : ""}`}>
                                         {/* Avatar */}
-                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                                        <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${
                                             message.role === "assistant" 
-                                                ? "bg-gradient-to-br from-orange-500 to-amber-600" 
+                                                ? "bg-gradient-to-br from-cyan-500 to-violet-600" 
                                                 : "bg-slate-700"
                                         }`}>
                                             {message.role === "assistant" ? (
-                                                <span className="text-sm"><ChessKnight /></span>
+                                                <HorseIcon size={14} className="text-white" />
                                             ) : (
-                                                <span className="text-xs text-white">You</span>
+                                                <span className="text-[10px] text-white font-bold">You</span>
                                             )}
                                         </div>
                                         
                                         {/* Message Bubble */}
                                         <div className={`rounded-2xl px-4 py-3 ${
                                             message.role === "assistant"
-                                                ? "bg-slate-800 text-white rounded-tl-none"
-                                                : "bg-gradient-to-br from-orange-500 to-amber-600 text-white rounded-tr-none"
+                                                ? "bg-white/5 border border-white/10 text-slate-200 rounded-tl-sm"
+                                                : "bg-gradient-to-br from-cyan-500 to-violet-600 text-white rounded-tr-sm"
                                         }`}>
-                                            <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
+                                            <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                                                {message.role === "assistant" ? formatMessage(message.content) : message.content}
+                                            </p>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -298,13 +301,13 @@ export default function NexusChatbot() {
                                     className="flex justify-start"
                                 >
                                     <div className="flex items-start gap-2">
-                                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center">
-                                            <span className="text-sm">🐴</span>
+                                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-500 to-violet-600 flex items-center justify-center">
+                                            <HorseIcon size={14} className="text-white" />
                                         </div>
-                                        <div className="bg-slate-800 rounded-2xl rounded-tl-none px-4 py-3">
+                                        <div className="bg-white/5 border border-white/10 rounded-2xl rounded-tl-sm px-4 py-3">
                                             <div className="flex items-center gap-2">
-                                                <Loader2 size={16} className="text-orange-400 animate-spin" />
-                                                <span className="text-sm text-slate-400">Nexus is thinking...</span>
+                                                <Loader2 size={14} className="text-cyan-400 animate-spin" />
+                                                <span className="text-sm text-slate-500">Thinking...</span>
                                             </div>
                                         </div>
                                     </div>
@@ -314,8 +317,23 @@ export default function NexusChatbot() {
                             <div ref={messagesEndRef} />
                         </div>
 
+                        {/* Quick Actions */}
+                        {messages.length <= 1 && (
+                            <div className="px-4 pb-2 flex gap-2 flex-wrap">
+                                {["I'm a developer", "I need AI talent", "How does it work?"].map((q) => (
+                                    <button
+                                        key={q}
+                                        onClick={() => { setInput(q); }}
+                                        className="text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-400 hover:text-cyan-400 hover:border-cyan-500/30 transition-colors cursor-pointer"
+                                    >
+                                        {q}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
                         {/* Input Area */}
-                        <div className="p-4 border-t border-white/10 bg-slate-900/50 shrink-0">
+                        <div className="p-3 border-t border-white/10 bg-slate-950/80 shrink-0">
                             <div className="flex items-center gap-2">
                                 <input
                                     ref={inputRef}
@@ -325,19 +343,16 @@ export default function NexusChatbot() {
                                     onKeyPress={handleKeyPress}
                                     placeholder="Ask Nexus anything..."
                                     disabled={isLoading}
-                                    className="flex-1 bg-slate-800 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:border-orange-500/50 transition-colors disabled:opacity-50"
+                                    className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50 transition-colors disabled:opacity-50"
                                 />
                                 <button
                                     onClick={sendMessage}
                                     disabled={!input.trim() || isLoading}
-                                    className="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-600 rounded-xl flex items-center justify-center hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                                    className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-violet-600 rounded-xl flex items-center justify-center hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                                 >
-                                    <Send size={20} className="text-white" />
+                                    <Send size={16} className="text-white" />
                                 </button>
                             </div>
-                            <p className="text-center text-xs text-slate-500 mt-2">
-                                Powered by AI • Somahorse Nexus
-                            </p>
                         </div>
                     </motion.div>
                 )}

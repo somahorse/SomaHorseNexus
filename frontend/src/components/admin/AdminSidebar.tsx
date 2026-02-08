@@ -16,6 +16,7 @@ import {
     BarChart3,
     Bell,
     ClipboardList,
+    MessageSquare,
 } from "lucide-react";
 import { useState } from "react";
 import NotificationBell from "@/components/notifications/NotificationBell";
@@ -26,6 +27,7 @@ const menuLinks = [
     { href: "/admin/talent", label: "Talent Pool", icon: UserCheck },
     { href: "/admin/projects", label: "Projects", icon: FolderKanban },
     { href: "/admin/applications", label: "Applications", icon: ClipboardList },
+    { href: "/admin/messages", label: "Messages", icon: MessageSquare },
     { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
     { href: "/admin/settings", label: "Settings", icon: Settings },
 ];

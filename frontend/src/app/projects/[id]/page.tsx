@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth, ADMIN_EMAILS } from "@/context/AuthContext";
 import { doc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import {
@@ -268,7 +268,7 @@ export default function ProjectCollaborationPage() {
     }
 
     // Access control: Check if user is authorized to view this project
-    const isAdmin = (user as any)?.role === "admin";
+    const isAdmin = (user as any)?.role === "admin" || ADMIN_EMAILS.includes(user?.email?.toLowerCase() || "");
     const isProjectClient = collaboration.client_id === user?.uid;
     const isAssignedTalent = collaboration.assigned_talent?.some(
         (talent) => talent.talent_id === user?.uid

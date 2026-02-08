@@ -8,6 +8,7 @@ import {
     LayoutDashboard,
     CheckCircle2,
     Briefcase,
+    FolderKanban,
     Wallet,
     Settings,
     HelpCircle,
@@ -45,6 +46,7 @@ export default function Sidebar() {
 
     const menuLinks = [
         { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+        { href: "/dashboard/my-projects", label: "My Projects", icon: FolderKanban },
         { href: "/dashboard/tasks", label: "Tasks", icon: CheckCircle2 },
         { href: "/dashboard/calendar", label: "Calendar", icon: Calendar },
         { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },

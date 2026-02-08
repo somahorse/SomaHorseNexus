@@ -1,6 +1,6 @@
 "use client";
 
-import type { ComponentType, CSSProperties } from "react";
+import type { ComponentType } from "react";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
@@ -192,50 +192,40 @@ export default function IndustriesPage() {
   const isOpen = Boolean(activeIndustry);
 
   return (
-    <main
-      className="flex min-h-screen flex-col bg-white text-slate-900"
-      style={
-        {
-          "--nexus-primary": "#4f46e5",
-          "--nexus-secondary": "#7c3aed",
-          "--nexus-ink": "#0b1020",
-        } as CSSProperties
-      }
-    >
-      {/* Hero */}
-      <section className="relative overflow-hidden pt-12 pb-24 lg:pt-20 lg:pb-32">
+    <main className="flex min-h-screen flex-col bg-white text-slate-900">
+      {/* Hero — Dark immersive */}
+      <section className="relative overflow-hidden pt-16 pb-24 lg:pt-24 lg:pb-32 bg-slate-950">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-16 left-1/2 h-72 w-[36rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,_rgba(79,70,229,0.28)_0%,_rgba(79,70,229,0)_68%)] blur-2xl" />
-          <div className="absolute bottom-10 right-10 h-80 w-80 rounded-full bg-[radial-gradient(circle,_rgba(124,58,237,0.25)_0%,_rgba(124,58,237,0)_70%)] blur-2xl" />
-          <div className="absolute left-10 top-20 h-48 w-48 rounded-full bg-[radial-gradient(circle,_rgba(15,23,42,0.18)_0%,_rgba(15,23,42,0)_70%)] blur-2xl" />
+          <div className="absolute top-0 left-[15%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px]" />
+          <div className="absolute bottom-0 right-[10%] w-[400px] h-[400px] bg-violet-500/10 rounded-full blur-[120px]" />
         </div>
         <div className="container mx-auto px-6 relative z-10">
           <ScrollReveal direction="up" delay={0.1} className="flex flex-col items-center text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600 shadow-sm">
-              <Sparkles size={14} className="text-[var(--nexus-primary)]" />
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-300 mb-6">
+              <Sparkles size={14} className="text-cyan-400" />
               Industries
             </div>
-            <h1 className="mt-6 text-4xl font-black tracking-tight text-slate-900 md:text-6xl lg:text-7xl">
-              We build industry-grade AI systems across Africa&apos;s most critical sectors.
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[var(--nexus-primary)] via-indigo-500 to-[var(--nexus-secondary)]">
-                Each industry has a tailored delivery loop.
+            <h1 className="text-4xl font-black tracking-tight text-white md:text-6xl lg:text-7xl leading-[0.95]">
+              Industry-Grade AI for<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-500">
+                Africa&apos;s Critical Sectors
               </span>
             </h1>
-            <p className="mt-6 max-w-3xl text-lg text-slate-600">
-              Somahorse Nexus combines verified talent, blueprint-driven solutions, and measurable impact to unlock
-              growth in Fintech, AgriTech, HealthTech, Education, and Manufacturing.
+            <p className="mt-6 max-w-3xl text-lg text-slate-400">
+              Verified talent, blueprint-driven solutions, and measurable impact across
+              Fintech, AgriTech, HealthTech, Education, and Manufacturing.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--nexus-ink)] px-8 py-4 text-sm font-bold text-white shadow-xl shadow-slate-900/20 transition-transform hover:scale-105"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 px-8 py-4 text-sm font-bold text-white shadow-xl shadow-cyan-500/20 transition-transform hover:scale-105"
               >
                 Request an industry brief
                 <ArrowRight size={18} />
               </Link>
               <Link
                 href="/services"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-8 py-4 text-sm font-bold text-slate-900 transition hover:bg-slate-50"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-white/5 border border-white/10 px-8 py-4 text-sm font-bold text-white transition hover:bg-white/10"
               >
                 Explore services
               </Link>
@@ -312,23 +302,27 @@ export default function IndustriesPage() {
       </section>
 
       {/* Pillars */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-6">
+      <section className="py-24 bg-slate-950 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-1/4 w-80 h-80 bg-cyan-500/8 rounded-full blur-[120px]" />
+          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-violet-500/8 rounded-full blur-[120px]" />
+        </div>
+        <div className="container mx-auto px-6 relative z-10">
           <ScrollReveal className="text-center max-w-3xl mx-auto">
-            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">How we deliver</p>
-            <h2 className="mt-4 text-3xl font-bold text-slate-900 md:text-4xl">
-              Built to move from discovery to measurable impact.
+            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-cyan-400">How we deliver</p>
+            <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl">
+              From discovery to measurable impact.
             </h2>
           </ScrollReveal>
           <div className="mt-12 grid gap-6 lg:grid-cols-3">
             {pillars.map((pillar, index) => (
               <ScrollReveal key={pillar.title} delay={0.1 * index}>
-                <div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-900 text-white">
+                <div className="rounded-3xl bg-white/5 border border-white/10 p-7 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-500/30">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500/20 to-violet-500/20 text-cyan-400">
                     <pillar.icon size={20} />
                   </div>
-                  <h3 className="mt-5 text-lg font-semibold text-slate-900">{pillar.title}</h3>
-                  <p className="mt-3 text-sm text-slate-600">{pillar.detail}</p>
+                  <h3 className="mt-5 text-lg font-semibold text-white">{pillar.title}</h3>
+                  <p className="mt-3 text-sm text-slate-400">{pillar.detail}</p>
                 </div>
               </ScrollReveal>
             ))}
@@ -337,35 +331,30 @@ export default function IndustriesPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-slate-50">
-        <div className="container mx-auto px-6">
-          <ScrollReveal className="rounded-3xl border border-slate-200 bg-[radial-gradient(circle_at_top,_rgba(79,70,229,0.2),_rgba(255,255,255,0.9))] p-10 text-center shadow-sm">
-            <div className="mx-auto flex max-w-3xl flex-col items-center">
-              <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
-                <Factory size={16} />
-                Industry delivery
-              </div>
-              <h2 className="mt-4 text-3xl font-bold text-slate-900 md:text-4xl">
-                Ready to activate your industry roadmap?
-              </h2>
-              <p className="mt-4 text-base text-slate-600">
-                We build verified teams, align on measurable outcomes, and deliver solutions that scale.
-              </p>
-              <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--nexus-ink)] px-8 py-4 text-sm font-bold text-white shadow-lg shadow-slate-900/25 transition-transform hover:scale-105"
-                >
-                  Talk to our team
-                  <ArrowRight size={18} />
-                </Link>
-                <Link
-                  href="/services"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 px-8 py-4 text-sm font-bold text-slate-900 transition hover:bg-slate-50"
-                >
-                  View services
-                </Link>
-              </div>
+      <section className="py-24 bg-white">
+        <div className="container mx-auto px-6 text-center">
+          <ScrollReveal className="flex flex-col items-center">
+            <Factory size={24} className="text-cyan-500 mb-4" />
+            <h2 className="text-3xl font-bold text-slate-900 md:text-4xl mb-4">
+              Ready to activate your industry roadmap?
+            </h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8">
+              We build verified teams, align on measurable outcomes, and deliver solutions that scale.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 px-8 py-4 text-sm font-bold text-white shadow-lg shadow-cyan-500/20 transition-transform hover:scale-105"
+              >
+                Talk to our team
+                <ArrowRight size={18} />
+              </Link>
+              <Link
+                href="/services"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 px-8 py-4 text-sm font-bold text-slate-900 transition hover:bg-slate-50"
+              >
+                View services
+              </Link>
             </div>
           </ScrollReveal>
         </div>

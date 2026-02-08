@@ -6,6 +6,9 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   signOut,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
   User,
 } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
@@ -33,6 +36,8 @@ interface AuthContextType {
   user: (User & Partial<UserData>) | null;
   loading: boolean;
   signInWithGoogle: (role: "client" | "talent") => Promise<void>;
+  signUpWithEmail: (name: string, email: string, password: string, role: "client" | "talent") => Promise<void>;
+  signInWithEmail: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   refreshUserData: () => Promise<void>;
 }
@@ -41,6 +46,8 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   signInWithGoogle: async () => { },
+  signUpWithEmail: async () => { },
+  signInWithEmail: async () => { },
   logout: async () => { },
   refreshUserData: async () => { },
 });
@@ -48,7 +55,7 @@ const AuthContext = createContext<AuthContextType>({
 export const useAuth = () => useContext(AuthContext);
 
 // Route definitions - defined outside component to avoid recreation
-const PUBLIC_ROUTES = ["/", "/login", "/signup", "/about", "/services", "/industries", "/contact"];
+const PUBLIC_ROUTES = ["/", "/login", "/signup", "/about", "/services", "/industries", "/contact", "/privacy", "/terms", "/cookies"];
 const TALENT_ONBOARDING_ROUTES = ["/onboarding/step-1", "/assessments/aptitude", "/assessments/coding"];
 const CLIENT_ONBOARDING_ROUTES = [
   "/client/onboarding/step-1",
@@ -60,7 +67,7 @@ const CLIENT_ONBOARDING_ROUTES = [
 ];
 
 // Admin email whitelist - only these emails can access admin dashboard
-const ADMIN_EMAILS = [
+export const ADMIN_EMAILS = [
   "admin@somahorse.com",
   "phutinexus@gmail.com",
   "minenhlecele34@gmail.com",
@@ -329,6 +336,54 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const signUpWithEmail = async (name: string, email: string, password: string, role: "client" | "talent") => {
+    try {
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+      const firebaseUser = result.user;
+
+      await updateProfile(firebaseUser, { displayName: name });
+
+      const userDocRef = doc(db, "users", firebaseUser.uid);
+      await setDoc(userDocRef, {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        displayName: name,
+        photoURL: null,
+        role: role,
+        onboardingStep: 1,
+        clientOnboardingStep: 1,
+        createdAt: new Date().toISOString(),
+      });
+
+      if (role === "talent") {
+        router.push("/onboarding/step-1");
+      } else {
+        router.push("/client/onboarding/step-1");
+      }
+    } catch (error) {
+      console.error("Error signing up with email", error);
+      throw error;
+    }
+  };
+
+  const signInWithEmail = async (email: string, password: string) => {
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      const firebaseUser = result.user;
+
+      const userDocRef = doc(db, "users", firebaseUser.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data() as UserData;
+        setUser({ ...firebaseUser, ...userData });
+      }
+    } catch (error) {
+      console.error("Error signing in with email", error);
+      throw error;
+    }
+  };
+
   const logout = async () => {
     try {
       await signOut(auth);
@@ -356,7 +411,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, signInWithGoogle, logout, refreshUserData }}
+      value={{ user, loading, signInWithGoogle, signUpWithEmail, signInWithEmail, logout, refreshUserData }}
     >
       {children}
     </AuthContext.Provider>

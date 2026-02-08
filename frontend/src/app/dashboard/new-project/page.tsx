@@ -26,72 +26,77 @@ import {
     Sparkles,
 } from "lucide-react";
 
+import { getSolutionById } from "@/lib/solutions-data";
+
 const solutions = [
     {
         id: "credit-scoring",
-        name: "AI Credit Scoring",
-        description: "Intelligent credit risk assessment using machine learning models trained on alternative data sources.",
+        name: "Credit Scoring Using Mobile Money Data",
+        description: "AI-driven credit assessment using real transaction behaviour rather than traditional credit histories, enabling faster and more inclusive lending decisions.",
         icon: CreditCard,
-        features: ["Alternative data integration", "Real-time scoring API", "Risk segmentation", "Custom model training"],
+        features: ["Alternative data integration", "Real-time scoring API", "Risk segmentation", "Explainability features"],
         color: "cyan",
         skills: ["Python", "Machine Learning", "Data Science", "API Development"],
     },
     {
         id: "fraud-detection",
-        name: "Fraud Detection",
-        description: "Real-time fraud prevention system powered by advanced anomaly detection algorithms.",
+        name: "Real-Time Fraud Detection",
+        description: "AI-powered monitoring that identifies and flags suspicious transaction behaviour instantly, reducing fraud losses across payment flows.",
         icon: Shield,
-        features: ["Transaction monitoring", "Behavioral analytics", "Alert management", "Investigation dashboard"],
+        features: ["Transaction monitoring", "Behavioral analytics", "Anomaly detection", "Compliance logging"],
         color: "violet",
         skills: ["Python", "Machine Learning", "Real-time Systems", "Security"],
     },
     {
         id: "payment-gateway",
         name: "Unified Payment Gateway",
-        description: "Seamless multi-provider payment integration with intelligent routing and reconciliation.",
+        description: "Accept card, mobile money, and bank transfer payments through one integration with intelligent routing and automated reconciliation.",
         icon: Banknote,
-        features: ["Multi-provider support", "Smart routing", "Auto reconciliation", "Payment analytics"],
+        features: ["Multi-provider support", "Smart routing", "Auto reconciliation", "Multi-currency settlement"],
         color: "emerald",
         skills: ["Node.js", "API Integration", "Payment Systems", "Security"],
     },
 ];
 
-const tiers = [
-    {
-        id: "basic",
-        name: "Basic",
-        description: "Essential AI capabilities for startups",
-        price: "R25,000",
-        icon: Zap,
-        color: "cyan",
-        teamSize: 2,
-        duration: "4-6 weeks",
-        features: ["Standard delivery", "Core implementation", "Basic API", "Email support"],
-    },
-    {
-        id: "standard",
-        name: "Standard",
-        description: "Full-featured solution for growing businesses",
-        price: "R75,000",
-        icon: Crown,
-        color: "violet",
-        popular: true,
-        teamSize: 3,
-        duration: "2-4 weeks",
-        features: ["Priority delivery", "Custom training", "Full API + Dashboard", "Priority support"],
-    },
-    {
-        id: "premium",
-        name: "Premium",
-        description: "Enterprise-grade with full customization",
-        price: "R150,000+",
-        icon: Rocket,
-        color: "emerald",
-        teamSize: 5,
-        duration: "1-2 weeks",
-        features: ["Express delivery", "Fully custom models", "Enterprise integrations", "Dedicated manager"],
-    },
-];
+function buildTiers(solutionId: string | null) {
+    const solution = solutionId ? getSolutionById(solutionId) : null;
+    return [
+        {
+            id: "basic",
+            name: "Basic",
+            description: solution?.tiers.basic.description || "Essential AI capabilities for startups",
+            price: solution?.tiers.basic.price || "R25,000",
+            icon: Zap,
+            color: "cyan",
+            teamSize: 2,
+            duration: "4-6 weeks",
+            features: solution?.tiers.basic.features.slice(0, 4) || ["Standard delivery", "Core implementation", "Basic API", "Email support"],
+        },
+        {
+            id: "standard",
+            name: "Standard",
+            description: solution?.tiers.standard.description || "Full-featured solution for growing businesses",
+            price: solution?.tiers.standard.price || "R80,000",
+            icon: Crown,
+            color: "violet",
+            popular: true,
+            teamSize: 3,
+            duration: "2-4 weeks",
+            features: solution?.tiers.standard.features.slice(0, 4) || ["Priority delivery", "Custom training", "Full API + Dashboard", "Priority support"],
+        },
+        {
+            id: "premium",
+            name: "Premium",
+            description: solution?.tiers.premium.description || "Enterprise-grade with full customization",
+            price: solution?.tiers.premium.price || "R250,000",
+            icon: Rocket,
+            color: "emerald",
+            teamSize: 5,
+            duration: "1-2 weeks",
+            features: solution?.tiers.premium.features.slice(0, 4) || ["Express delivery", "Fully custom models", "Enterprise integrations", "Dedicated manager"],
+        },
+    ];
+}
 
 export default function NewProjectPage() {
     const { user, loading } = useAuth();
@@ -103,6 +108,8 @@ export default function NewProjectPage() {
     const [timeline, setTimeline] = useState("normal");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [profile, setProfile] = useState<any>(null);
+
+    const tiers = buildTiers(selectedSolution);
 
     useEffect(() => {
         if (!loading && !user) {

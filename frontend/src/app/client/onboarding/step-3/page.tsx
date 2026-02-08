@@ -2,9 +2,10 @@
 
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { doc, updateDoc } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { getSolutionById } from "@/lib/solutions-data";
 import {
     ArrowRight,
     ArrowLeft,
@@ -20,79 +21,102 @@ import {
     Users,
 } from "lucide-react";
 
-const tiers = [
-    {
-        id: "basic",
-        name: "Basic",
-        description: "Essential AI capabilities for startups and small teams",
-        price: "R25,000",
-        period: "/project",
-        icon: Zap,
-        color: "cyan",
-        popular: false,
-        features: [
-            { text: "Standard delivery (4-6 weeks)", icon: Clock },
-            { text: "Core model implementation", icon: Code },
-            { text: "Basic API integration", icon: Rocket },
-            { text: "Email support", icon: Headphones },
-            { text: "1 revision round", icon: CheckCircle2 },
-        ],
-        notIncluded: [
-            "Custom model training",
-            "Priority support",
-            "Advanced integrations",
-        ],
-    },
-    {
-        id: "standard",
-        name: "Standard",
-        description: "Full-featured solution for growing businesses",
-        price: "R75,000",
-        period: "/project",
-        icon: Crown,
-        color: "violet",
-        popular: true,
-        features: [
-            { text: "Priority delivery (2-4 weeks)", icon: Clock },
-            { text: "Custom model training", icon: Code },
-            { text: "Full API + Dashboard", icon: BarChart3 },
-            { text: "Priority email & chat support", icon: Headphones },
-            { text: "3 revision rounds", icon: CheckCircle2 },
-            { text: "Basic analytics dashboard", icon: BarChart3 },
-        ],
-        notIncluded: [
-            "Dedicated success manager",
-            "On-premise deployment",
-        ],
-    },
-    {
-        id: "premium",
-        name: "Premium",
-        description: "Enterprise-grade solution with full customization",
-        price: "R150,000+",
-        period: "/project",
-        icon: Rocket,
-        color: "emerald",
-        popular: false,
-        features: [
-            { text: "Express delivery (1-2 weeks)", icon: Clock },
-            { text: "Fully custom AI models", icon: Code },
-            { text: "Enterprise integrations", icon: Shield },
-            { text: "Dedicated success manager", icon: Users },
-            { text: "Unlimited revisions", icon: CheckCircle2 },
-            { text: "Advanced analytics + reporting", icon: BarChart3 },
-            { text: "On-premise deployment option", icon: Shield },
-            { text: "24/7 priority support", icon: Headphones },
-        ],
-        notIncluded: [],
-    },
-];
+function buildTiers(solutionId: string | null) {
+    const solution = solutionId ? getSolutionById(solutionId) : null;
+    return [
+        {
+            id: "basic" as const,
+            name: "Basic",
+            description: solution?.tiers.basic.description || "Essential AI capabilities for startups and small teams",
+            price: solution?.tiers.basic.price || "R25,000",
+            period: "/project",
+            icon: Zap,
+            color: "cyan",
+            popular: false,
+            features: [
+                { text: "Standard delivery (4-6 weeks)", icon: Clock },
+                { text: "Core model implementation", icon: Code },
+                { text: "Basic API integration", icon: Rocket },
+                { text: "Email support", icon: Headphones },
+                { text: "1 revision round", icon: CheckCircle2 },
+            ],
+            solutionFeatures: solution?.tiers.basic.features || [],
+            ideal: solution?.tiers.basic.ideal || "",
+            notIncluded: [
+                "Custom model training",
+                "Priority support",
+                "Advanced integrations",
+            ],
+        },
+        {
+            id: "standard" as const,
+            name: "Standard",
+            description: solution?.tiers.standard.description || "Full-featured solution for growing businesses",
+            price: solution?.tiers.standard.price || "R80,000",
+            period: "/project",
+            icon: Crown,
+            color: "violet",
+            popular: true,
+            features: [
+                { text: "Priority delivery (2-4 weeks)", icon: Clock },
+                { text: "Custom model training", icon: Code },
+                { text: "Full API + Dashboard", icon: BarChart3 },
+                { text: "Priority email & chat support", icon: Headphones },
+                { text: "3 revision rounds", icon: CheckCircle2 },
+                { text: "Basic analytics dashboard", icon: BarChart3 },
+            ],
+            solutionFeatures: solution?.tiers.standard.features || [],
+            ideal: solution?.tiers.standard.ideal || "",
+            notIncluded: [
+                "Dedicated success manager",
+                "On-premise deployment",
+            ],
+        },
+        {
+            id: "premium" as const,
+            name: "Premium",
+            description: solution?.tiers.premium.description || "Enterprise-grade solution with full customization",
+            price: solution?.tiers.premium.price || "R250,000",
+            period: "/project",
+            icon: Rocket,
+            color: "emerald",
+            popular: false,
+            features: [
+                { text: "Express delivery (1-2 weeks)", icon: Clock },
+                { text: "Fully custom AI models", icon: Code },
+                { text: "Enterprise integrations", icon: Shield },
+                { text: "Dedicated success manager", icon: Users },
+                { text: "Unlimited revisions", icon: CheckCircle2 },
+                { text: "Advanced analytics + reporting", icon: BarChart3 },
+                { text: "On-premise deployment option", icon: Shield },
+                { text: "24/7 priority support", icon: Headphones },
+            ],
+            solutionFeatures: solution?.tiers.premium.features || [],
+            ideal: solution?.tiers.premium.ideal || "",
+            notIncluded: [],
+        },
+    ];
+}
 
 export default function ClientOnboardingStep3() {
     const { user, refreshUserData } = useAuth();
     const router = useRouter();
     const [selectedTier, setSelectedTier] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [userSolution, setUserSolution] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchSolution = async () => {
+            if (!user) return;
+            const snap = await getDoc(doc(db, "users", user.uid));
+            if (snap.exists()) {
+                setUserSolution(snap.data().selectedSolution || null);
+            }
+        };
+        fetchSolution();
+    }, [user]);
+
+    const tiers = buildTiers(userSolution);
 
     const handleSubmit = async () => {
         if (!user || !selectedTier) return;

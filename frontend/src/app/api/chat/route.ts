@@ -62,8 +62,8 @@ export async function POST(request: NextRequest) {
                 generationConfig: {
                     temperature: 0.7,
                     topK: 40,
-                    topP: 0.95,
-                    maxOutputTokens: 1024,
+                    topP: 0.9,
+                    maxOutputTokens: 600,
                 },
                 safetySettings: [
                     {
