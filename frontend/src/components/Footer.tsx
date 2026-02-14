@@ -35,6 +35,7 @@ export default function Footer() {
                             <FooterLink href="/about" label="About Us" />
                             <FooterLink href="/services" label="Services" />
                             <FooterLink href="/industries" label="Industries" />
+                            <FooterLink href="/pricing" label="Pricing" />
                         </ul>
                     </div>
 

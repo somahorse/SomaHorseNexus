@@ -6,29 +6,30 @@ import {
   ArrowRight,
   BarChart3,
   CheckCircle2,
+  CreditCard,
   Factory,
+  GraduationCap,
+  HeartPulse,
   Layers,
+  Leaf,
   MapPin,
   Rocket,
   Sparkles,
   Target,
-  Linkedin,
-  Quote,
   Zap,
   Globe,
   Shield,
   TrendingUp,
   Users,
   Cpu,
-  CircleDot,
-  ChevronRight,
   Lightbulb,
   Award,
-  CreditCard,
   Activity,
+  BadgeCheck,
 } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import Footer from "@/components/Footer";
+import { sectorCatalog, type Sector } from "@/lib/solutions-data";
 
 const systemPillars = [
   {
@@ -62,27 +63,28 @@ const workingLoop = [
   "Payment is recorded with a 60/40 split and dashboards update in real time.",
 ];
 
-const industries = [
-  { title: "Fintech", detail: "Credit scoring, fraud detection, and unified payment gateway solutions." },
-  { title: "Agriculture", detail: "Crop disease scanning, farmer-to-buyer marketplaces, and precision farming." },
-  { title: "Healthcare", detail: "Telemedicine, AI diagnostic assistants, and drug inventory tracking." },
-  { title: "Education", detail: "Adaptive learning platforms, skills training apps, and school management." },
-  { title: "Manufacturing", detail: "Production monitoring, predictive maintenance, and supply chain tracking." },
-];
+const sectorIcons: Record<Sector, typeof CreditCard> = {
+  fintech: CreditCard,
+  agriculture: Leaf,
+  healthcare: HeartPulse,
+  education: GraduationCap,
+  manufacturing: Factory,
+};
 
-const fintechTools = [
-  {
-    title: "Credit Scoring Using Mobile Money Data",
-    detail: "Assesses creditworthiness using transaction history. Basic R25,000 · Standard R80,000 · Premium R250,000.",
-  },
-  {
-    title: "Real-Time Fraud Detection",
-    detail: "Identifies and flags suspicious transactions instantly. Basic R30,000 · Standard R100,000 · Premium R300,000.",
-  },
-  {
-    title: "Unified Payment Gateway",
-    detail: "Accept multiple payment methods through one integration. Basic R20,000 · Standard R70,000 · Premium R200,000.",
-  },
+const sectorGradients: Record<Sector, string> = {
+  fintech: "from-indigo-500 to-blue-600",
+  agriculture: "from-emerald-500 to-teal-600",
+  healthcare: "from-rose-500 to-pink-600",
+  education: "from-violet-500 to-purple-600",
+  manufacturing: "from-cyan-500 to-blue-600",
+};
+
+const engagementIncludes = [
+  "A dedicated project lead",
+  "A verified AI delivery team",
+  "Deployment into a secure, production-ready environment",
+  "Post-deployment performance audit",
+  "Platform support during the warranty period",
 ];
 
 const deliveryStandards = [
@@ -186,8 +188,7 @@ export default function AboutPage() {
               </span>
             </h1>
             <p className="mt-6 max-w-2xl text-lg text-slate-400 leading-relaxed">
-              Somahorse Nexus builds the infrastructure that connects Africa&apos;s technical talent with the complex
-              challenges of its most important industries — creating a new engine for economic growth.
+              Somahorse Nexus delivers tailored AI solutions designed for Africa&apos;s key industries — building the operating system for Africa&apos;s AI economy.
             </p>
 
             {/* Stats row */}
@@ -261,11 +262,10 @@ export default function AboutPage() {
             ].map((item, i) => (
               <ScrollReveal key={item.title} delay={i * 0.1}>
                 <div className="group h-full rounded-2xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500">
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 ${
-                    item.color === "indigo" ? "bg-indigo-100 text-indigo-600" :
-                    item.color === "violet" ? "bg-violet-100 text-violet-600" :
-                    "bg-cyan-100 text-cyan-600"
-                  }`}>
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 ${item.color === "indigo" ? "bg-indigo-100 text-indigo-600" :
+                      item.color === "violet" ? "bg-violet-100 text-violet-600" :
+                        "bg-cyan-100 text-cyan-600"
+                    }`}>
                     <item.icon size={22} />
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">{item.title}</h3>
@@ -353,23 +353,25 @@ export default function AboutPage() {
                     <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/20 p-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-emerald-400 font-bold">Developer Share</span>
-                        <span className="text-2xl font-black text-white">60%</span>
+                        <span className="text-2xl font-black text-white">R60,000</span>
                       </div>
                       <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                         <div className="h-full w-[60%] bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full" />
                       </div>
+                      <p className="mt-2 text-xs text-slate-500">Split per team agreement</p>
                     </div>
                     <div className="rounded-2xl bg-indigo-500/10 border border-indigo-500/20 p-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-indigo-400 font-bold">Platform Share</span>
-                        <span className="text-2xl font-black text-white">40%</span>
+                        <span className="text-2xl font-black text-white">R40,000</span>
                       </div>
                       <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                         <div className="h-full w-[40%] bg-gradient-to-r from-indigo-400 to-violet-500 rounded-full" />
                       </div>
+                      <p className="mt-2 text-xs text-slate-500">Fuels growth and support services</p>
                     </div>
                   </div>
-                  <p className="mt-4 text-xs text-slate-500">Transparent split logged in real-time dashboards</p>
+                  <p className="mt-4 text-xs text-slate-500">Example: Standard Tier Fraud Detection at R100,000</p>
                 </div>
               </ScrollReveal>
 
@@ -403,16 +405,43 @@ export default function AboutPage() {
         <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-white to-transparent" />
       </section>
 
-      {/* Industries + Fintech — Light */}
-      <section className="py-24 bg-slate-50 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-80 h-80 bg-gradient-to-br from-cyan-100/40 to-transparent rounded-full blur-3xl pointer-events-none" />
+      {/* All Engagements Include */}
+      <section className="py-20 bg-slate-50 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-80 h-80 bg-gradient-to-br from-emerald-100/40 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="container mx-auto px-6 relative z-10">
+          <ScrollReveal className="text-center max-w-3xl mx-auto mb-12">
+            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 border border-emerald-100 px-4 py-2 text-xs font-bold uppercase tracking-[0.25em] text-emerald-700 mb-6">
+              <Shield size={14} />
+              Every engagement includes
+            </div>
+            <h2 className="text-3xl font-black text-slate-900 md:text-4xl tracking-tight">
+              Enterprise-grade{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-cyan-600">delivery standards</span>{" "}
+              as standard.
+            </h2>
+          </ScrollReveal>
+          <div className="max-w-3xl mx-auto grid sm:grid-cols-2 gap-4">
+            {engagementIncludes.map((item, i) => (
+              <ScrollReveal key={item} delay={i * 0.08}>
+                <div className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition-shadow">
+                  <BadgeCheck size={20} className="mt-0.5 text-emerald-500 shrink-0" />
+                  <p className="text-sm font-semibold text-slate-800">{item}</p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Industries — All 5 Sectors */}
+      <section className="py-24 bg-white relative overflow-hidden">
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-violet-100/40 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="container mx-auto px-6 relative z-10">
           <ScrollReveal className="text-center max-w-3xl mx-auto mb-16">
             <div className="inline-flex items-center gap-2 rounded-full bg-white border border-slate-200 px-4 py-2 text-xs font-bold uppercase tracking-[0.25em] text-slate-600 mb-6 shadow-sm">
               <Globe size={14} className="text-indigo-500" />
-              Industries
+              5 Sectors · 15 Solutions
             </div>
             <h2 className="text-3xl font-black text-slate-900 md:text-5xl tracking-tight">
               Starting with{" "}
@@ -420,66 +449,39 @@ export default function AboutPage() {
               expanding everywhere.
             </h2>
             <p className="mt-6 text-lg text-slate-500">
-              We connect verified talent to real industry problems across Africa&apos;s most critical sectors.
+              We deliver tailored AI solutions across Africa&apos;s most critical sectors.
             </p>
           </ScrollReveal>
 
-          {/* Industry Cards */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4 max-w-6xl mx-auto mb-16">
-            {industries.map((industry, i) => {
-              const icons = [CreditCard, TrendingUp, Activity, Award, Factory];
-              const colors = ["indigo", "emerald", "rose", "violet", "cyan"];
-              const Icon = icons[i];
-              const color = colors[i];
+          {/* Sector Cards with solution counts */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4 max-w-6xl mx-auto mb-10">
+            {sectorCatalog.map((sector, i) => {
+              const Icon = sectorIcons[sector.id];
+              const gradient = sectorGradients[sector.id];
               return (
-                <ScrollReveal key={industry.title} delay={i * 0.08}>
+                <ScrollReveal key={sector.id} delay={i * 0.08}>
                   <div className="group h-full rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500 text-center">
-                    <div className={`w-11 h-11 rounded-xl mx-auto mb-4 flex items-center justify-center ${
-                      color === "indigo" ? "bg-indigo-100 text-indigo-600" :
-                      color === "emerald" ? "bg-emerald-100 text-emerald-600" :
-                      color === "rose" ? "bg-rose-100 text-rose-600" :
-                      color === "violet" ? "bg-violet-100 text-violet-600" :
-                      "bg-cyan-100 text-cyan-600"
-                    }`}>
+                    <div className={`w-11 h-11 rounded-xl mx-auto mb-4 flex items-center justify-center bg-gradient-to-br ${gradient} text-white shadow-md`}>
                       <Icon size={20} />
                     </div>
-                    <h3 className="text-base font-bold text-slate-900 mb-1">{industry.title}</h3>
-                    <p className="text-xs text-slate-500 leading-relaxed">{industry.detail}</p>
+                    <h3 className="text-base font-bold text-slate-900 mb-1">{sector.name}</h3>
+                    <p className="text-xs text-slate-500 leading-relaxed mb-2">{sector.description}</p>
+                    <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-bold text-slate-600">
+                      {sector.solutions.length} solutions
+                    </span>
                   </div>
                 </ScrollReveal>
               );
             })}
           </div>
-
-          {/* Fintech Focus */}
-          <ScrollReveal delay={0.15}>
-            <div className="rounded-3xl border border-slate-200 bg-white p-8 lg:p-10 shadow-sm max-w-4xl mx-auto">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
-                  <Target size={18} className="text-white" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900">Fintech Catalog</h3>
-                  <p className="text-sm text-slate-500">Our initial AI solution offerings</p>
-                </div>
-              </div>
-              <div className="grid md:grid-cols-3 gap-4">
-                {fintechTools.map((tool, i) => {
-                  const toolIcons = [CreditCard, Shield, Zap];
-                  const toolColors = ["from-indigo-500 to-blue-600", "from-violet-500 to-purple-600", "from-emerald-500 to-teal-600"];
-                  const ToolIcon = toolIcons[i];
-                  return (
-                    <div key={tool.title} className="group rounded-2xl border border-slate-100 bg-slate-50 p-5 hover:bg-white hover:shadow-md hover:border-slate-200 transition-all duration-300">
-                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${toolColors[i]} flex items-center justify-center mb-4`}>
-                        <ToolIcon size={18} className="text-white" />
-                      </div>
-                      <h4 className="font-bold text-slate-900 mb-2">{tool.title}</h4>
-                      <p className="text-sm text-slate-500 leading-relaxed">{tool.detail}</p>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+          <ScrollReveal delay={0.3} className="text-center">
+            <Link
+              href="/pricing"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
+            >
+              View full pricing catalogue
+              <ArrowRight size={16} />
+            </Link>
           </ScrollReveal>
         </div>
       </section>

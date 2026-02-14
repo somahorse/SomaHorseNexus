@@ -55,7 +55,7 @@ const AuthContext = createContext<AuthContextType>({
 export const useAuth = () => useContext(AuthContext);
 
 // Route definitions - defined outside component to avoid recreation
-const PUBLIC_ROUTES = ["/", "/login", "/signup", "/about", "/services", "/industries", "/contact", "/privacy", "/terms", "/cookies"];
+const PUBLIC_ROUTES = ["/", "/login", "/signup", "/about", "/services", "/industries", "/pricing", "/contact", "/privacy", "/terms", "/cookies"];
 const TALENT_ONBOARDING_ROUTES = ["/onboarding/step-1", "/assessments/aptitude", "/assessments/coding"];
 const CLIENT_ONBOARDING_ROUTES = [
   "/client/onboarding/step-1",
