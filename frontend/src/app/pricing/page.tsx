@@ -95,27 +95,30 @@ function SolutionCard({ solution }: { solution: Solution }) {
             <button
                 type="button"
                 onClick={() => setExpanded(!expanded)}
-                className="w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-left"
+                className="w-full flex items-start sm:items-center justify-between gap-3 p-4 sm:p-6 text-left"
             >
-                <div className="flex items-center gap-4 min-w-0">
+                <div className="flex items-start sm:items-center gap-3 sm:gap-4 min-w-0 flex-1">
                     <div
-                        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${meta.gradient} text-white shadow-md`}
+                        className={`flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${meta.gradient} text-white shadow-md mt-0.5 sm:mt-0`}
                     >
-                        <meta.icon size={20} />
+                        <meta.icon size={18} />
                     </div>
-                    <div className="min-w-0">
-                        <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">
+                    <div className="min-w-0 flex-1">
+                        <h3 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 leading-snug break-words">
                             {solution.name}
                         </h3>
-                        <p className="text-sm text-slate-500 mt-0.5">{solution.tagline}</p>
+                        <p className="text-xs sm:text-sm text-slate-500 mt-0.5 break-words">{solution.tagline}</p>
+                        <span className="inline-block sm:hidden rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-semibold text-slate-600 mt-2">
+                            {solution.tiers.basic.price} – {solution.tiers.premium.price}
+                        </span>
                     </div>
                 </div>
-                <div className="flex items-center gap-3 shrink-0">
+                <div className="flex items-center gap-2 shrink-0 mt-1 sm:mt-0">
                     <span className="hidden sm:inline-block rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
                         {solution.tiers.basic.price} – {solution.tiers.premium.price}
                     </span>
                     <ChevronDown
-                        size={20}
+                        size={18}
                         className={`text-slate-400 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
                     />
                 </div>
@@ -126,9 +129,9 @@ function SolutionCard({ solution }: { solution: Solution }) {
                 className={`transition-all duration-300 ease-in-out ${expanded ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"
                     } overflow-hidden`}
             >
-                <div className="px-5 sm:px-6 pb-6 pt-0">
-                    <p className="text-sm text-slate-600 leading-relaxed mb-6">{solution.description}</p>
-                    <div className="grid gap-4 md:grid-cols-3">
+                <div className="px-4 sm:px-6 pb-6 pt-0">
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">{solution.description}</p>
+                    <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
                         {tiers.map((tier) => {
                             const data = solution.tiers[tier.key];
                             return (
@@ -149,7 +152,7 @@ function SolutionCard({ solution }: { solution: Solution }) {
                                             </span>
                                         )}
                                     </div>
-                                    <p className="text-2xl font-black text-slate-900 mb-1">{data.price}</p>
+                                    <p className="text-xl sm:text-2xl font-black text-slate-900 mb-1">{data.price}</p>
                                     <p className="text-sm text-slate-500 mb-4">{data.description}</p>
                                     <ul className="space-y-2">
                                         {data.features.map((feature) => (
@@ -188,7 +191,7 @@ export default function PricingPage() {
     return (
         <main className="flex min-h-screen flex-col bg-white text-slate-900">
             {/* ─── Hero ────────────────────────────────────────────── */}
-            <section className="relative overflow-hidden bg-slate-950 pt-20 pb-28 lg:pt-28 lg:pb-36">
+            <section className="relative overflow-hidden bg-slate-950 pt-24 pb-20 sm:pt-20 sm:pb-28 lg:pt-28 lg:pb-36">
                 <div className="absolute inset-0 pointer-events-none">
                     <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-gradient-to-b from-cyan-600/20 via-violet-500/15 to-transparent rounded-full blur-3xl" />
                     <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-gradient-to-tl from-indigo-500/15 to-transparent rounded-full blur-3xl" />
@@ -200,15 +203,15 @@ export default function PricingPage() {
                             <Zap size={14} className="text-cyan-400" />
                             Transparent Pricing
                         </div>
-                        <h1 className="text-4xl font-black tracking-tight text-white md:text-6xl lg:text-7xl leading-[0.95]">
+                        <h1 className="text-3xl font-black tracking-tight text-white sm:text-4xl md:text-6xl lg:text-7xl leading-[1.1] sm:leading-[0.95]">
                             Sector-Specific{" "}
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-500">
                                 AI Solutions
                             </span>
-                            <br />
+                            <br className="hidden sm:block" />{" "}
                             Catalogue
                         </h1>
-                        <p className="mt-6 max-w-3xl text-lg text-slate-400">
+                        <p className="mt-6 max-w-3xl text-base sm:text-lg text-slate-400 px-2 sm:px-0">
                             Tailored AI solutions for Africa&apos;s key industries. Three transparent tiers —
                             Basic, Standard, and Premium — so you can select the level that aligns with your
                             operational needs and strategic goals.
@@ -251,7 +254,7 @@ export default function PricingPage() {
                             delivery standards.
                         </h2>
                     </ScrollReveal>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4 max-w-6xl mx-auto">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 max-w-6xl mx-auto">
                         {engagementIncludes.map((item, i) => (
                             <ScrollReveal key={item.text} delay={i * 0.08}>
                                 <div className="group h-full rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500 text-center">
@@ -306,8 +309,8 @@ export default function PricingPage() {
                             <ScrollReveal key={tier.title} delay={0.1 * i}>
                                 <div
                                     className={`rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1 ${tier.featured
-                                            ? "bg-gradient-to-br from-white/[0.12] to-white/[0.04] border-2 border-cyan-500/40 shadow-lg shadow-cyan-500/10"
-                                            : "bg-white/5 border border-white/10 hover:border-cyan-500/30"
+                                        ? "bg-gradient-to-br from-white/[0.12] to-white/[0.04] border-2 border-cyan-500/40 shadow-lg shadow-cyan-500/10"
+                                        : "bg-white/5 border border-white/10 hover:border-cyan-500/30"
                                         }`}
                                 >
                                     {tier.featured && (
@@ -335,7 +338,7 @@ export default function PricingPage() {
                         <p className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">
                             Full Catalogue
                         </p>
-                        <h2 className="mt-4 text-3xl font-black text-slate-900 md:text-4xl tracking-tight">
+                        <h2 className="mt-4 text-2xl sm:text-3xl font-black text-slate-900 md:text-4xl tracking-tight">
                             15 AI Solutions Across{" "}
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-violet-600">
                                 5 Sectors
@@ -348,13 +351,13 @@ export default function PricingPage() {
                     </ScrollReveal>
 
                     {/* Sector Filter Tabs */}
-                    <div className="flex flex-wrap justify-center gap-2 mb-12">
+                    <div className="flex flex-wrap justify-center gap-2 mb-12 px-0 sm:px-0">
                         <button
                             type="button"
                             onClick={() => setActiveSector("all")}
-                            className={`rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 ${activeSector === "all"
-                                    ? "bg-gradient-to-r from-cyan-500 to-violet-600 text-white shadow-lg shadow-violet-500/25"
-                                    : "bg-white border border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                            className={`rounded-full px-3 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 ${activeSector === "all"
+                                ? "bg-gradient-to-r from-cyan-500 to-violet-600 text-white shadow-lg shadow-violet-500/25"
+                                : "bg-white border border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50"
                                 }`}
                         >
                             All Sectors
@@ -367,9 +370,9 @@ export default function PricingPage() {
                                     key={sector.id}
                                     type="button"
                                     onClick={() => setActiveSector(sector.id)}
-                                    className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 ${activeSector === sector.id
-                                            ? `bg-gradient-to-r ${meta.gradient} text-white shadow-lg`
-                                            : "bg-white border border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                                    className={`inline-flex items-center gap-1.5 sm:gap-2 rounded-full px-3 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 ${activeSector === sector.id
+                                        ? `bg-gradient-to-r ${meta.gradient} text-white shadow-lg`
+                                        : "bg-white border border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50"
                                         }`}
                                 >
                                     <Icon size={16} />
@@ -388,17 +391,19 @@ export default function PricingPage() {
                                 <div key={sector.id}>
                                     {/* Sector Header */}
                                     <ScrollReveal>
-                                        <div className={`flex items-center gap-4 mb-6 pb-4 border-b ${meta.border}`}>
-                                            <div
-                                                className={`flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${meta.gradient} text-white shadow-lg`}
-                                            >
-                                                <Icon size={22} />
+                                        <div className={`flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-6 pb-4 border-b ${meta.border}`}>
+                                            <div className="flex items-center gap-3 sm:gap-4">
+                                                <div
+                                                    className={`flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${meta.gradient} text-white shadow-lg`}
+                                                >
+                                                    <Icon size={20} />
+                                                </div>
+                                                <div className="min-w-0">
+                                                    <h3 className="text-xl sm:text-2xl font-black text-slate-900">{sector.name}</h3>
+                                                    <p className="text-xs sm:text-sm text-slate-500 break-words">{sector.description}</p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <h3 className="text-2xl font-black text-slate-900">{sector.name}</h3>
-                                                <p className="text-sm text-slate-500">{sector.description}</p>
-                                            </div>
-                                            <span className="ml-auto rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">
+                                            <span className="self-start sm:self-auto sm:ml-auto rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600 shrink-0">
                                                 {sector.solutions.length} solutions
                                             </span>
                                         </div>
@@ -430,14 +435,14 @@ export default function PricingPage() {
                                     <Layers size={14} />
                                     Developer Partnership
                                 </div>
-                                <h2 className="text-3xl font-black text-slate-900 md:text-4xl tracking-tight">
+                                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 md:text-4xl tracking-tight">
                                     60/40{" "}
                                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">
                                         Revenue Share
                                     </span>{" "}
                                     Model
                                 </h2>
-                                <p className="mt-4 text-lg text-slate-500 leading-relaxed">
+                                <p className="mt-4 text-base sm:text-lg text-slate-500 leading-relaxed">
                                     All projects operate on a transparent 60/40 revenue share — ensuring developers
                                     earn fair, high-value compensation while Somahorse Nexus sustains operations,
                                     sales, support, and continued scaling.
@@ -459,7 +464,7 @@ export default function PricingPage() {
                         </ScrollReveal>
 
                         <ScrollReveal direction="left" delay={0.15}>
-                            <div className="rounded-3xl bg-slate-950 p-8 shadow-2xl shadow-slate-900/30 relative overflow-hidden">
+                            <div className="rounded-3xl bg-slate-950 p-5 sm:p-8 shadow-2xl shadow-slate-900/30 relative overflow-hidden">
                                 <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-indigo-500/20 to-transparent rounded-full blur-2xl" />
                                 <div className="relative z-10">
                                     <h3 className="text-lg font-bold text-white mb-2">Example Breakdown</h3>
@@ -471,7 +476,7 @@ export default function PricingPage() {
                                         <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/20 p-4">
                                             <div className="flex items-center justify-between mb-2">
                                                 <span className="text-emerald-400 font-bold">Developer Share</span>
-                                                <span className="text-2xl font-black text-white">R60,000</span>
+                                                <span className="text-xl sm:text-2xl font-black text-white">R60,000</span>
                                             </div>
                                             <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                                                 <div className="h-full w-[60%] bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full" />
@@ -484,7 +489,7 @@ export default function PricingPage() {
                                         <div className="rounded-2xl bg-indigo-500/10 border border-indigo-500/20 p-4">
                                             <div className="flex items-center justify-between mb-2">
                                                 <span className="text-indigo-400 font-bold">Platform Share</span>
-                                                <span className="text-2xl font-black text-white">R40,000</span>
+                                                <span className="text-xl sm:text-2xl font-black text-white">R40,000</span>
                                             </div>
                                             <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                                                 <div className="h-full w-[40%] bg-gradient-to-r from-indigo-400 to-violet-500 rounded-full" />
@@ -510,7 +515,7 @@ export default function PricingPage() {
                 <div className="container mx-auto px-6 text-center relative z-10">
                     <ScrollReveal className="flex flex-col items-center">
                         <Target size={24} className="text-cyan-500 mb-4" />
-                        <h2 className="text-3xl font-bold text-white md:text-4xl mb-4">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-white md:text-4xl mb-4">
                             Interested in deploying AI in your sector?
                         </h2>
                         <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-4">

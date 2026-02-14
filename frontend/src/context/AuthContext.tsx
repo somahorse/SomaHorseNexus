@@ -8,6 +8,7 @@ import {
   signOut,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
   updateProfile,
   User,
 } from "firebase/auth";
@@ -38,6 +39,7 @@ interface AuthContextType {
   signInWithGoogle: (role: "client" | "talent") => Promise<void>;
   signUpWithEmail: (name: string, email: string, password: string, role: "client" | "talent") => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
   logout: () => Promise<void>;
   refreshUserData: () => Promise<void>;
 }
@@ -48,6 +50,7 @@ const AuthContext = createContext<AuthContextType>({
   signInWithGoogle: async () => { },
   signUpWithEmail: async () => { },
   signInWithEmail: async () => { },
+  resetPassword: async () => { },
   logout: async () => { },
   refreshUserData: async () => { },
 });
@@ -55,7 +58,7 @@ const AuthContext = createContext<AuthContextType>({
 export const useAuth = () => useContext(AuthContext);
 
 // Route definitions - defined outside component to avoid recreation
-const PUBLIC_ROUTES = ["/", "/login", "/signup", "/about", "/services", "/industries", "/pricing", "/contact", "/privacy", "/terms", "/cookies"];
+const PUBLIC_ROUTES = ["/", "/login", "/signup", "/forgot-password", "/about", "/services", "/industries", "/pricing", "/contact", "/privacy", "/terms", "/cookies"];
 const TALENT_ONBOARDING_ROUTES = ["/onboarding/step-1", "/assessments/aptitude", "/assessments/coding"];
 const CLIENT_ONBOARDING_ROUTES = [
   "/client/onboarding/step-1",
@@ -71,6 +74,7 @@ export const ADMIN_EMAILS = [
   "admin@somahorse.com",
   "phutinexus@gmail.com",
   "minenhlecele34@gmail.com",
+  "uchenna.somahorse@gmail.com",
   // Add more admin emails as needed
 ];
 
@@ -384,6 +388,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const resetPassword = async (email: string) => {
+    await sendPasswordResetEmail(auth, email);
+  };
+
   const logout = async () => {
     try {
       await signOut(auth);
@@ -411,7 +419,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, signInWithGoogle, signUpWithEmail, signInWithEmail, logout, refreshUserData }}
+      value={{ user, loading, signInWithGoogle, signUpWithEmail, signInWithEmail, resetPassword, logout, refreshUserData }}
     >
       {children}
     </AuthContext.Provider>

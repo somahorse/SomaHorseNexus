@@ -21,6 +21,7 @@ export default function Navbar() {
     // Hide Navbar on specific routes
     const isHidden = pathname === '/login' ||
         pathname === '/signup' ||
+        pathname === '/forgot-password' ||
         pathname?.startsWith('/auth') ||
         pathname?.startsWith('/onboarding') ||
         pathname?.startsWith('/client/onboarding') ||
