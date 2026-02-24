@@ -86,7 +86,7 @@ export default function IndustriesPage() {
           <div className="absolute top-0 left-[15%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px]" />
           <div className="absolute bottom-0 right-[10%] w-[400px] h-[400px] bg-violet-500/10 rounded-full blur-[120px]" />
         </div>
-        <div className="container mx-auto px-6 relative z-10">
+        <div className="container mx-auto px-6 relative z-10 flex flex-col  items-center justify-center">
           <ScrollReveal direction="up" delay={0.1} className="flex flex-col items-center text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-300 mb-6">
               <Sparkles size={14} className="text-cyan-400" />
@@ -104,7 +104,7 @@ export default function IndustriesPage() {
               Manufacturing. Each solution is offered in three transparent tiers — Basic, Standard,
               and Premium.
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
+            <div className="mt-10 flex flex-col sm:flex-row items-center gap-4 justify-center">
               <Link
                 href="/contact"
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 px-8 py-4 text-sm font-bold text-white shadow-xl shadow-cyan-500/20 transition-transform hover:scale-105"
@@ -141,10 +141,8 @@ export default function IndustriesPage() {
               const isExpanded = expandedSector === sector.id;
 
               return (
-                <ScrollReveal key={sector.id} delay={index * 0.08}>
+                <ScrollReveal key={sector.id} delay={index * 0.08} >
                   <div
-                    className={`group relative rounded-2xl border bg-white p-6 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl cursor-pointer ${isExpanded ? "border-cyan-300 shadow-lg ring-2 ring-cyan-500/20" : "border-slate-200"
-                      }`}
                     onClick={() => setExpandedSector(isExpanded ? null : sector.id)}
                     role="button"
                     tabIndex={0}
@@ -241,8 +239,8 @@ export default function IndustriesPage() {
       {/* CTA */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6 text-center">
-          <ScrollReveal className="flex flex-col items-center">
-            <Factory size={24} className="text-cyan-500 mb-4" />
+          <ScrollReveal className="flex flex-col items-center mx-auto ">
+            <Factory size={24} className="text-cyan-500 mb-4 mx-auto" />
             <h2 className="text-3xl font-bold text-slate-900 md:text-4xl mb-4">
               Ready to deploy AI in your sector?
             </h2>
@@ -250,7 +248,7 @@ export default function IndustriesPage() {
               We build verified teams, align on measurable outcomes, and deliver solutions that
               scale.
             </p>
-            <div className="flex flex-col sm:flex-row items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center gap-4 w-full justify-center ">
               <Link
                 href="/contact"
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 px-8 py-4 text-sm font-bold text-white shadow-lg shadow-cyan-500/20 transition-transform hover:scale-105"

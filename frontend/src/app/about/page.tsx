@@ -170,7 +170,7 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxjaXJjbGUgZmlsbD0iI2ZmZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGN4PSIyMCIgY3k9IjIwIiByPSIxIi8+PC9nPjwvc3ZnPg==')] opacity-60" />
         </div>
 
-        <div className="container mx-auto px-6 relative z-10">
+        <div className="container mx-auto px-6 relative z-10 flex flex-col  items-center justify-center">
           <ScrollReveal direction="up" delay={0.1} className="flex flex-col items-center text-center">
             {/* Badge */}
             <div className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm px-5 py-2.5 mb-8">
@@ -187,7 +187,7 @@ export default function AboutPage() {
                 people.
               </span>
             </h1>
-            <p className="mt-6 max-w-2xl text-lg text-slate-400 leading-relaxed">
+            <p className="mt-6 max-w-2xl text-lg text-slate-400 leading-relaxed mx-auto">
               Somahorse Nexus delivers tailored AI solutions designed for Africa&apos;s key industries — building the operating system for Africa&apos;s AI economy.
             </p>
 
@@ -212,7 +212,7 @@ export default function AboutPage() {
             </div>
 
             {/* CTAs */}
-            <div className="mt-12 flex flex-col sm:flex-row items-center gap-4">
+            <div className="mt-12 flex flex-col sm:flex-row items-center gap-4 justify-center">
               <Link
                 href="/signup"
                 className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 px-8 py-4 text-sm font-bold text-white shadow-xl shadow-indigo-500/25 transition-all hover:shadow-indigo-500/40 hover:scale-105"
@@ -254,14 +254,13 @@ export default function AboutPage() {
             </p>
           </ScrollReveal>
 
-          <div className="grid gap-5 md:grid-cols-3 max-w-5xl mx-auto mb-16">
+          <div className="grid gap-5 md:grid-cols-3 max-w-5xl mx-auto place-items-center justify-center justify-items-center mb-16">
             {[
               { icon: CheckCircle2, title: "Verify", desc: "Transforms potential into verified skill with real project deliverables.", color: "indigo" },
               { icon: Users, title: "Match", desc: "Matches verified teams to industry-grade problems using intelligent algorithms.", color: "violet" },
               { icon: Rocket, title: "Deliver", desc: "Delivers complete solutions with measurable impact and transparent economics.", color: "cyan" },
             ].map((item, i) => (
-              <ScrollReveal key={item.title} delay={i * 0.1}>
-                <div className="group h-full rounded-2xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500">
+              <ScrollReveal key={item.title} delay={i * 0.1} className="group h-full rounded-2xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500  " >
                   <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 ${item.color === "indigo" ? "bg-indigo-100 text-indigo-600" :
                       item.color === "violet" ? "bg-violet-100 text-violet-600" :
                         "bg-cyan-100 text-cyan-600"
@@ -270,13 +269,12 @@ export default function AboutPage() {
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">{item.title}</h3>
                   <p className="text-sm text-slate-500 leading-relaxed">{item.desc}</p>
-                </div>
               </ScrollReveal>
             ))}
           </div>
 
           {/* System Pillars */}
-          <ScrollReveal delay={0.15}>
+          <ScrollReveal delay={0.15} className=" mx-auto" >
             <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-8 lg:p-10 shadow-sm max-w-5xl mx-auto">
               <div className="flex items-center gap-3 mb-8">
                 <div className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center">
