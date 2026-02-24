@@ -21,9 +21,10 @@ export default function Footer() {
                             Connecting Africa&apos;s top AI talent with global opportunities. The operating system for the future of work.
                         </p>
                         <div className="mt-6 flex gap-4">
-                            <SocialLink href="#" icon={<Twitter size={20} />} label="Twitter" />
-                            <SocialLink href="#" icon={<Linkedin size={20} />} label="LinkedIn" />
-                            <SocialLink href="#" icon={<Instagram size={20} />} label="Instagram" />
+                            <SocialLink href="https://x.com/somahorsenexus?s=21" icon={<Twitter size={20} />} label="Twitter" />
+                            <SocialLink href="https://www.linkedin.com/company/somahorse-nexus/"  icon={<Linkedin size={20} />} label="LinkedIn" />
+                            <SocialLink href="https://www.instagram.com/somahorsenexus?igsh=dzg2emMweDdmMGQ2" icon={<Instagram size={20} />} label="Instagram" />
+                            <SocialLink href="https://www.facebook.com/share/1DmopsomF6/?mibextid=wwXIfr" icon={<Facebook size={20} />} label="Instagram" />
                         </div>
                     </div>
 
