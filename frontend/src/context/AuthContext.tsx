@@ -15,6 +15,7 @@ import {
 import { auth, db } from "@/lib/firebase";
 import { useRouter, usePathname } from "next/navigation";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import LoadingScreen from "@/components/ui/LoadingScreen";
 
 interface UserData {
   uid: string;
@@ -403,17 +404,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative w-16 h-16">
-            <div className="absolute top-0 left-0 w-full h-full border-4 border-slate-200 rounded-full"></div>
-            <div className="absolute top-0 left-0 w-full h-full border-4 border-transparent border-t-cyan-500 border-r-violet-500 rounded-full animate-spin"></div>
-          </div>
-          <p className="text-slate-500 font-medium">
-            Loading Somahorse Nexus...
-          </p>
-        </div>
-      </div>
+      <LoadingScreen />
     );
   }
 

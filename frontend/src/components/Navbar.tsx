@@ -36,7 +36,7 @@ export default function Navbar() {
 
     return (
         <header className={`fixed top-0 left-0 right-0 z-50 bg-white backdrop-blur-xl shadow-sm transition-transform duration-300 border-b border-slate-200 ${isMenuOpen ? "translate-x-64" : "translate-x-0"}`}>
-            <div className="mx-auto max-w-7xl px-4 sm:px-6">
+            <div className="mx-auto  px-[6%]">
                 <div className="flex h-20 items-center justify-between py-3">
                     {/* Logo Section */}
                     <Link href="/" className="flex items-center gap-3 group">
@@ -54,9 +54,6 @@ export default function Navbar() {
                             <div className="flex items-center gap-2">
                                 <span className="text-xl font-bold text-slate-900 tracking-tight">
                                     Somahorse Nexus
-                                </span>
-                                <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-gradient-to-r from-cyan-500 to-violet-600 text-white">
-                                    Beta
                                 </span>
                             </div>
                             <span className="text-[10px] uppercase tracking-wider font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-violet-600">
@@ -89,22 +86,24 @@ export default function Navbar() {
                                 );
                             })}
                         </nav>
+                    </div>
 
-                        {/* Auth Buttons */}
-                        <div className="flex items-center gap-3 ml-2">
-                            <Link
-                                href="/login"
-                                className="px-5 py-2.5 rounded-full text-sm font-semibold text-slate-700 bg-white/60 backdrop-blur-sm border border-slate-200/50 shadow-sm hover:bg-white hover:shadow-md transition-all duration-300"
-                            >
-                                Login
-                            </Link>
-                            <Link
-                                href="/signup"
-                                className="px-6 py-2.5 rounded-full text-sm font-bold text-white shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 bg-gradient-to-r from-cyan-500 to-violet-600 hover:shadow-violet-500/30"
-                            >
-                                Get Started
-                            </Link>
-                        </div>
+
+
+                    {/* Auth Buttons */}
+                    <div className="hidden lg:flex items-center gap-3 ml-2">
+                        <Link
+                            href="/login"
+                            className="px-5 py-2.5 rounded-full text-sm font-semibold text-slate-700 bg-white/60 backdrop-blur-sm border border-slate-200/50 shadow-sm hover:bg-white hover:shadow-md transition-all duration-300"
+                        >
+                            Login
+                        </Link>
+                        <Link
+                            href="/signup"
+                            className="px-6 py-2.5 rounded-full text-sm font-bold text-white shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 bg-gradient-to-r from-cyan-500 to-violet-600 hover:shadow-violet-500/30"
+                        >
+                            Get Started
+                        </Link>
                     </div>
 
                     {/* Mobile Toggle */}

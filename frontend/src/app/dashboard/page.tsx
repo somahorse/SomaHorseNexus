@@ -258,9 +258,6 @@ export default function DashboardPage() {
                                         <span className="px-3 py-1 bg-violet-500/20 text-violet-400 text-xs font-bold rounded-full border border-violet-500/30">
                                             Client
                                         </span>
-                                        <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full bg-gradient-to-r from-cyan-500 to-violet-600 text-white">
-                                            Beta
-                                        </span>
                                     </div>
                                     <p className="text-slate-400 mb-2">{email} • Member since {memberSince}</p>
                                     {organization?.name && (
@@ -822,9 +819,6 @@ export default function DashboardPage() {
                                     <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-full border border-emerald-500/30 flex items-center gap-1.5">
                                         <CircleDot size={10} className="animate-pulse" />
                                         Verified & Active
-                                    </span>
-                                    <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full bg-gradient-to-r from-cyan-500 to-violet-600 text-white">
-                                        Beta
                                     </span>
                                 </div>
                                 <p className="text-slate-400 mb-4">{email} • Member since {memberSince}</p>

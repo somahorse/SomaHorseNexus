@@ -174,9 +174,6 @@ export default function AdminDashboard() {
                     <div className="mb-8">
                         <div className="flex items-center gap-3 mb-2">
                             <h1 className="text-2xl lg:text-3xl font-bold text-white">Admin Overview</h1>
-                            <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full bg-gradient-to-r from-cyan-500 to-violet-600 text-white">
-                                Beta
-                            </span>
                         </div>
                         <p className="text-slate-400">Platform statistics and recent activity</p>
                     </div>

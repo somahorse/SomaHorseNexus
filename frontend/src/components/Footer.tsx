@@ -13,9 +13,6 @@ export default function Footer() {
                     <div className="col-span-1 md:col-span-1">
                         <div className="flex items-center gap-2 mb-2">
                             <span className="text-xl font-bold tracking-tight">Somahorse Nexus</span>
-                            <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-gradient-to-r from-cyan-500 to-violet-600 text-white">
-                                Beta
-                            </span>
                         </div>
                         <p className="text-sm text-slate-300">
                             Connecting Africa&apos;s top AI talent with global opportunities. The operating system for the future of work.
@@ -63,7 +60,6 @@ export default function Footer() {
                 </div>
                 <div className="mt-12 border-t border-slate-800 pt-8 text-center space-y-2">
                     <p className="text-xs leading-5 text-slate-400">&copy; {new Date().getFullYear()} Somahorse Nexus. All rights reserved.</p>
-                    <p className="text-xs leading-5 text-slate-500">This is a beta version. Features and functionality may change as we continue to improve the platform.</p>
                 </div>
             </div>
         </footer>
