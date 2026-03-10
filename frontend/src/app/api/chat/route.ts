@@ -96,9 +96,9 @@ export async function POST(request: NextRequest) {
         }
 
         const data = await response.json();
-        
+
         // Extract the response text
-        const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || 
+        const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text ||
             "I apologize, but I couldn't generate a response. Please try again.";
 
         return NextResponse.json({ response: responseText });

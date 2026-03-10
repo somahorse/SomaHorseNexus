@@ -27,9 +27,6 @@ function MobileMenu() {
                 <div className="mb-8 mt-2">
                     <div className="flex items-center gap-2">
                         <span className="text-xl font-bold tracking-tight text-slate-900">Somahorse Nexus</span>
-                        <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-gradient-to-r from-cyan-500 to-violet-600 text-white">
-                            Beta
-                        </span>
                     </div>
                 </div>
 
