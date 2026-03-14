@@ -46,26 +46,26 @@ export default function Home() {
           <ScrollReveal direction="up" delay={0.1} className="flex flex-col items-center">
             <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 backdrop-blur-md border border-white/10 shadow-lg mb-8">
               <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-              <span className="text-sm font-semibold text-slate-300">Now onboarding developers across Africa</span>
+              <span className="text-xs md:text-sm font-semibold text-slate-300">Now onboarding developers across Africa</span>
             </div>
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-white mb-6 leading-[0.95]">
-              The <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-500">AI Talent</span><br />
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-white mb-6 leading-[110%] md:leading-[0.95]">
+              The <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-500  ">AI Talent</span><br />
               Operating System
             </h1>
           </ScrollReveal>
 
           <ScrollReveal direction="up" delay={0.3} className="flex flex-col items-center">
-            <p className="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto mb-12 leading-relaxed">
+            <p className="text-lg md:text-2xl text-slate-400 max-w-3xl mx-auto mb-12 leading-relaxed">
               Connect with Africa&apos;s elite AI engineers. Somahorse Nexus is the platform powering the next generation of global innovation.
             </p>
           </ScrollReveal>
 
           <ScrollReveal direction="up" delay={0.5}>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/signup" className="px-10 py-4 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-lg hover:shadow-xl hover:shadow-cyan-500/30 transition-all hover:scale-105">
+              <Link href="/signup" className="px-10 py-3 md:py-4 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-base md:text-lg hover:shadow-xl hover:shadow-cyan-500/30 transition-all hover:scale-105">
                 Get Started
               </Link>
-              <Link href="/about" className="px-10 py-4 rounded-full bg-white/5 backdrop-blur-md text-white font-bold text-lg hover:bg-white/10 transition-all border border-white/10">
+              <Link href="/about" className="px-10 py-3 md:py-4 rounded-full bg-white/5 backdrop-blur-md text-white font-bold text-base md:text-lg hover:bg-white/10 transition-all border border-white/10">
                 Learn More
               </Link>
             </div>
