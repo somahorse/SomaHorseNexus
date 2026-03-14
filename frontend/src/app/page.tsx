@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
 import {
   ArrowRight,
   Code,
@@ -11,7 +10,6 @@ import {
   CheckCircle,
   Users,
   Building2,
-  ChevronDown,
   Sparkles,
   BarChart3,
   Factory,
@@ -20,6 +18,7 @@ import {
 } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import Footer from "@/components/Footer";
+import FAQSection from "@/components/Faq";
 
 const industries = [
   { title: "Fintech", icon: BarChart3, color: "from-cyan-500 to-blue-600", image: "/industries/fintech.png" },
@@ -29,27 +28,9 @@ const industries = [
   { title: "Manufacturing", icon: Factory, color: "from-violet-500 to-purple-600", image: "/industries/manufacturing.png" },
 ];
 
-const faqs = [
-  {
-    question: "How does Somahorse Nexus verify talent?",
-    answer: "We use a rigorous assessment process including technical coding challenges, aptitude tests, and real project deliverables. Only developers who pass all gates gain verified status on our platform.",
-  },
-  {
-    question: "What industries do you serve?",
-    answer: "We specialize in Fintech, AgriTech, HealthTech, Education, and Manufacturing. Our AI blueprints are customized for each industry's unique challenges and compliance requirements.",
-  },
-  {
-    question: "How are payments handled?",
-    answer: "All payments are processed securely through our platform with a transparent 60/40 split (developer/platform). Developers receive guaranteed payments upon milestone approval.",
-  },
-  {
-    question: "Can I hire a dedicated team?",
-    answer: "Yes! We offer flexible engagement models from single project deliveries to dedicated teams. Our Premium tier includes ongoing optimization and support.",
-  },
-];
+
 
 export default function Home() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
     <main className="flex min-h-screen flex-col bg-white overflow-hidden">
@@ -308,43 +289,7 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24 bg-slate-50 relative">
-        <div className="container mx-auto px-6 max-w-4xl">
-          <ScrollReveal className="text-center mb-12">
-            <p className="text-sm font-semibold text-slate-500 uppercase tracking-widest mb-4">FAQ</p>
-            <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-4">
-              Frequently Asked Questions
-            </h2>
-          </ScrollReveal>
-
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <div
-                key={index}
-                className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm animate-fadeInUp"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <button
-                  type="button"
-                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                  className="w-full flex items-center justify-between p-6 text-left hover:bg-slate-50 transition-colors"
-                >
-                  <span className="text-lg font-semibold text-slate-900">{faq.question}</span>
-                  <ChevronDown
-                    size={20}
-                    className={`text-slate-500 transition-transform duration-300 shrink-0 ml-4 ${openFaq === index ? 'rotate-180' : ''}`}
-                  />
-                </button>
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${openFaq === index ? 'max-h-40 pb-6' : 'max-h-0'}`}
-                >
-                  <p className="px-6 text-slate-600 leading-relaxed">{faq.answer}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+     <FAQSection/>
 
       {/* CTA Section */}
       <section className="py-24 relative overflow-hidden">
