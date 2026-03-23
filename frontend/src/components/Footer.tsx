@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Twitter, Linkedin, Instagram, Facebook } from "lucide-react";
+import { FaTelegramPlane } from "react-icons/fa";
 
 export default function Footer() {
     return (
@@ -19,9 +20,10 @@ export default function Footer() {
                         </p>
                         <div className="mt-6 flex gap-4">
                             <SocialLink href="https://x.com/somahorsenexus?s=21" icon={<Twitter size={20} />} label="Twitter" />
-                            <SocialLink href="https://www.linkedin.com/company/somahorse-nexus/"  icon={<Linkedin size={20} />} label="LinkedIn" />
+                            <SocialLink href="https://www.linkedin.com/company/somahorse-nexus/" icon={<Linkedin size={20} />} label="LinkedIn" />
                             <SocialLink href="https://www.instagram.com/somahorsenexus?igsh=dzg2emMweDdmMGQ2" icon={<Instagram size={20} />} label="Instagram" />
                             <SocialLink href="https://www.facebook.com/share/1DmopsomF6/?mibextid=wwXIfr" icon={<Facebook size={20} />} label="Instagram" />
+                            <SocialLink href="https://t.me/+MSi8O2d7NH81YjFk" icon={<FaTelegramPlane size={24} />} label="Instagram" />
                         </div>
                     </div>
 
