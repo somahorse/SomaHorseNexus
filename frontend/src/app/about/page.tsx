@@ -418,9 +418,9 @@ export default function AboutPage() {
               as standard.
             </h2>
           </ScrollReveal>
-          <div className="max-w-3xl mx-auto grid sm:grid-cols-2 gap-4">
+          <div className="max-w-3xl mx-auto grid sm:grid-cols-2 place-items-center justify-center justify-items-center gap-4">
             {engagementIncludes.map((item, i) => (
-              <ScrollReveal key={item} delay={i * 0.08}>
+              <ScrollReveal key={item} delay={i * 0.08} className="w-full! h-full! " >
                 <div className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition-shadow">
                   <BadgeCheck size={20} className="mt-0.5 text-emerald-500 shrink-0" />
                   <p className="text-sm font-semibold text-slate-800">{item}</p>
