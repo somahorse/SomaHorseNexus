@@ -1,0 +1,42 @@
+export const teamMembers = [
+  {
+    name: "Uchenna Ngubane",
+    role: "Founder & CEO",
+    country: "South Africa",
+    bio: "Visionary leader driving Africa's AI talent revolution and building the bridge between potential and opportunity.",
+    gradient: "from-indigo-500 to-violet-600",
+    accent: "indigo",
+  },
+  {
+    name: "Nkululeko Menziwa",
+    role: "Sales Lead",
+    country: "South Africa",
+    bio: "Strategic growth driver forging partnerships and expanding Somahorse Nexus across the African continent.",
+    gradient: "from-cyan-500 to-blue-600",
+    accent: "cyan",
+  },
+  {
+    name: "Mark Hefer",
+    role: "Digital Marketer",
+    country: "South Africa",
+    bio: "Creative storyteller amplifying the Somahorse brand and connecting with talent and clients through digital channels.",
+    gradient: "from-amber-500 to-orange-600",
+    accent: "amber",
+  },
+  {
+    name: "Minenhle Cele",
+    role: "Software Engineer",
+    country: "South Africa",
+    bio: "Full-stack craftsman building the robust platform infrastructure that powers the entire Nexus ecosystem.",
+    gradient: "from-emerald-500 to-teal-600",
+    accent: "emerald",
+  },
+  {
+    name: "Syed Hussain",
+    role: "AI Engineer",
+    country: "South Africa",
+    bio: "Machine learning specialist designing the intelligent matching algorithms and AI solutions at the heart of the platform.",
+    gradient: "from-rose-500 to-pink-600",
+    accent: "rose",
+  },
+];
