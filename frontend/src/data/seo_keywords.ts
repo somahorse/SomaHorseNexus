@@ -1,5 +1,83 @@
-
-
 export const seokeywords = [
-"Ai engineer"
-]
+  "Somahorse Nexus",
+  "Somahorse Nexus platform",
+  "Somahorse Nexus certification",
+  "Somahorse Nexus developers",
+  "Somahorse Nexus solutions",
+
+  "hire AI developers Africa",
+  "trust AI talent",
+  "AI skills without degree",
+  "find verified AI developers",
+  "AI talent shortage Africa",
+  "deploy AI solutions fast",
+  "stop hiring freelancers",
+  "guaranteed AI delivery",
+
+  "get certified in AI",
+  "prove AI skills",
+  "AI developer certification Africa",
+  "build AI portfolio",
+  "AI challenge certification",
+  "become AI engineer",
+  "AI job opportunities Africa",
+  "remote AI developer jobs",
+
+  "AI fraud detection for banks",
+  "credit scoring AI solutions",
+  "AI for fintech Africa",
+  "predictive maintenance AI",
+  "AI in agriculture",
+  "AI in healthcare Africa",
+  "AI in education",
+  "AI solutions for manufacturers",
+
+  "fintech AI solutions",
+  "edtech AI tools",
+  "healthcare AI systems",
+  "agricultural AI models",
+  "manufacturing AI analytics",
+  "fraud detection Nigeria",
+  "credit scoring Kenya",
+  "AI tutors South Africa",
+
+  "AI solutions guaranteed delivery",
+  "fixed price AI development",
+  "guaranteed AI outcomes",
+  "AI projects with SLA",
+  "AI delivery guarantee Africa",
+  "enterprise AI deployment",
+  "custom AI solutions Africa",
+
+  "AI developers Nigeria",
+  "AI talent Kenya",
+  "AI engineers South Africa",
+  "AI solutions Morocco",
+  "AI services Egypt",
+  "AI development across Africa",
+  "pan African AI talent",
+
+  "certified AI developers Africa",
+  "verified AI talent",
+  "AI skill verification",
+  "trust AI engineers",
+  "AI certification platform",
+  "developer proof of work",
+  "AI talent verification system",
+
+  "best AI developers in Africa",
+  "hire trusted AI engineers",
+  "AI fraud detection for Nigerian banks",
+  "credit scoring models for Kenya",
+  "AI solutions for South African fintech",
+  "guaranteed AI delivery Africa",
+  "deploy AI fast Africa",
+
+  "AI talent operating system",
+  "AI developer marketplace",
+  "AI project delivery platform",
+  "end to end AI solutions",
+  "AI team deployment",
+  "pre-scoped AI tools",
+  "AI solution library Africa"
+];

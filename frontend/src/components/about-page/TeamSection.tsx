@@ -1,6 +1,5 @@
-import { ArrowRight, MapPin, Sparkles } from "lucide-react";
+import { MapPin, Sparkles } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { ScrollReveal } from "../ui/ScrollReveal";
 import { teamMembers } from "@/data/team_members";
 
@@ -36,14 +35,14 @@ export default function TeamMemberSection() {
                 </ScrollReveal>
 
                 {/* Founder Spotlight */}
-                <ScrollReveal delay={0.1} className="mb-12">
+                <ScrollReveal delay={0.1} className="mb-12 mx-auto ">
                     <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-xl p-1 max-w-4xl mx-auto overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 via-violet-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                         <div className="relative rounded-[1.25rem] bg-slate-950/80 p-8 lg:p-10">
                             <div className="flex flex-col lg:flex-row items-center gap-8">
                                 <div className="relative">
-                                    <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-3xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-5xl lg:text-6xl font-black shadow-2xl shadow-indigo-500/25">
-                                        U
+                                    <div className="w-32 h-32 lg:w-40 lg:h-40 relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-5xl lg:text-6xl font-black shadow-2xl shadow-indigo-500/25">
+                                        <Image src={"/team/uche-sn.jpeg"} alt="founder" fill className="object-center object-cover" />
                                     </div>
                                     <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-slate-950 rounded-xl flex items-center justify-center border border-white/10">
                                         <Image src="/south-africa.svg" alt="ZA" width={22} height={22} />
@@ -96,17 +95,17 @@ export default function TeamMemberSection() {
                         const accent = accents[member.accent] || accents.cyan;
 
                         return (
-                            <ScrollReveal key={member.name} delay={0.1 + index * 0.1}>
+                            <ScrollReveal key={member.name} delay={0.1 + index * 0.1} className="h-full flex items-stretch " >
                                 <div className="group h-full rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all duration-500">
                                     <div className="flex flex-col items-center text-center">
                                         {/* Avatar */}
-                                        <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white text-2xl font-black shadow-xl ${glow} group-hover:scale-110 transition-transform duration-500`}>
-                                            {member.name.charAt(0)}
+                                        <div className={`w-20 h-20 relative overflow-hidden rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white text-2xl font-black shadow-xl ${glow} group-hover:scale-110 transition-transform duration-500`}>
+                                            <Image src={member.image} alt="founder" fill className="object-center object-cover" />
                                         </div>
 
                                         {/* Flag */}
                                         <div className="mt-3 flex items-center gap-1.5">
-                                            <Image src="/south-africa.svg" alt="ZA" width={14} height={14} />
+                                            <Image src={member.flag} alt="ZA" width={14} height={14} />
                                             <span className="text-[11px] text-slate-500 font-medium">{member.country}</span>
                                         </div>
 
@@ -128,7 +127,7 @@ export default function TeamMemberSection() {
                 </div>
 
                 {/* Bottom Tagline */}
-                <ScrollReveal delay={0.3} className="mt-14">
+                <ScrollReveal delay={0.3} className="mt-14 mx-auto ">
                     <div className="flex flex-col items-center gap-4">
                         <div className="flex items-center -space-x-3">
                             {teamMembers.map((member) => {
@@ -143,9 +142,9 @@ export default function TeamMemberSection() {
                                 return (
                                     <div
                                         key={member.name}
-                                        className={`w-10 h-10 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white text-sm font-bold ring-2 ring-slate-950`}
+                                        className={`w-10 h-10 relative overflow-hidden rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white text-sm font-bold ring-2 ring-slate-950`}
                                     >
-                                        {member.name.charAt(0)}
+                                        <Image src={member.image} alt={member.name.charAt(0)} fill className="object-center object-cover" />
                                     </div>
                                 );
                             })}
