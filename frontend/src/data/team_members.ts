@@ -6,19 +6,19 @@ export const teamMembers = [
     bio: "Visionary leader driving Africa's AI talent revolution and building the bridge between potential and opportunity.",
     gradient: "from-indigo-500 to-violet-600",
     accent: "indigo",
-    image: "/team/",
+    image: "/team/uche-sn.jpeg",
     flag: "/flags/south-africa.svg"
   },
-  // {
-  //   name: "Nkululeko Menziwa",
-  //   role: "Sales Lead",
-  //   country: "South Africa",
-  //   bio: "Strategic growth driver forging partnerships and expanding Somahorse Nexus across the African continent.",
-  //   gradient: "from-cyan-500 to-blue-600",
-  //   accent: "cyan",
-  //   image: "/team/",
-  //   flag: "/flags/south-africa.svg"
-  // },
+  {
+    name: "Nosihle Nondlazi",
+    role: "Sales Lead",
+    country: "South Africa",
+    bio: "Strategic growth driver forging partnerships and expanding Somahorse Nexus across the African continent.",
+    gradient: "from-cyan-500 to-blue-600",
+    accent: "cyan",
+    image: "/team/Noshihle.jpeg",
+    flag: "/flags/south-africa.svg"
+  },
   {
     name: "Okeke Chinedu Emmanuel",
     role: "Frontend Engineer",
