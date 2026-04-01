@@ -21,7 +21,7 @@ export default function MissionSection() {
                         {" "}for Africa.
                     </h2>
                     <p className="mt-6 text-lg text-slate-500 max-w-2xl mx-auto">
-                        Not a job board. Not freelance. Not traditional recruitment. We transform raw talent into verified, deployable skill — and deliver complete AI solutions end-to-end.
+                        Not a job board. Not freelance. Not traditional recruitment. We transform raw talent into verified, deployable skill,  and deliver complete AI solutions end-to-end.
                     </p>
                 </ScrollReveal>
 
@@ -47,7 +47,7 @@ export default function MissionSection() {
                 {/* System Pillars */}
                 <ScrollReveal delay={0.15} className=" mx-auto" >
                     <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-8 lg:p-10 shadow-sm max-w-5xl mx-auto">
-                        <div className="flex items-center gap-3 mb-8">
+                        <div className="flex items-center gap-3 mb-10  w-fit md:mx-auto ">
                             <div className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center">
                                 <Cpu size={18} className="text-white" />
                             </div>
