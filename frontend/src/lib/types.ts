@@ -1,6 +1,8 @@
 
 // Types matching the Backend Pydantic Models
 
+import { ComponentType } from "react";
+
 export type ProjectTier = "basic" | "standard" | "premium";
 
 export interface ServiceCatalogItem {
@@ -19,3 +21,12 @@ export interface Challenge {
     starter_code: string;
     passing_accuracy: number;
 }
+
+
+export type Service = {
+  id: string;
+  title: string;
+  summary: string;
+  outcomes: string[];
+  icon: ComponentType<{ size?: number }>;
+};
