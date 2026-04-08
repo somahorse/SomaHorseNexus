@@ -14,6 +14,7 @@ import {
     CheckCircle2,
     Sparkles,
     Lock,
+    Trees,
 } from "lucide-react";
 
 const solutions = [
@@ -59,6 +60,20 @@ const solutions = [
         color: "emerald",
         available: true,
     },
+    {
+        id: "agritech",
+        name: "AI-Driven AgriTech Solutions",
+        description: "Leverage AI and mobile data to optimize crop yields, monitor farm health, and provide predictive insights for smarter agricultural decisions.",
+        icon: Trees,
+        features: [
+            "Crop health monitoring",
+            "Yield prediction analytics",
+            "Soil and weather insights",
+            "Farm management dashboards",
+        ],
+        color: "lime",
+        available: true,
+    }
 ];
 
 export default function ClientOnboardingStep2() {
@@ -107,6 +122,12 @@ export default function ClientOnboardingStep2() {
                 bg: "bg-emerald-500/20",
                 icon: "text-emerald-400",
                 text: "text-emerald-400",
+            },
+            lime: {
+                border: isSelected ? "border-lime-500" : "border-white/10 hover:border-lime-500/50",
+                bg: "bg-lime-500/20",
+                icon: "text-lime-400",
+                text: "text-lime-400",
             },
         };
         return colors[color] || colors.cyan;
@@ -157,9 +178,8 @@ export default function ClientOnboardingStep2() {
                                         key={solution.id}
                                         onClick={() => setSelectedSolution(solution.id)}
                                         disabled={!solution.available}
-                                        className={`relative p-6 bg-white/5 backdrop-blur border-2 ${colors.border} rounded-2xl text-left transition-all duration-300 ${
-                                            isSelected ? "ring-2 ring-offset-2 ring-offset-slate-900" : ""
-                                        } ${!solution.available ? "opacity-50 cursor-not-allowed" : "hover:bg-white/10"}`}
+                                        className={`relative p-6 bg-white/5 backdrop-blur border-2 ${colors.border} rounded-2xl text-left transition-all duration-300 ${isSelected ? "ring-2 ring-offset-2 ring-offset-slate-900" : ""
+                                            } ${!solution.available ? "opacity-50 cursor-not-allowed" : "hover:bg-white/10"}`}
                                     >
                                         {isSelected && (
                                             <div className="absolute top-4 right-4">
