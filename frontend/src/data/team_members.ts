@@ -12,7 +12,7 @@ export const teamMembers = [
   {
     name: "Tony Tiyou ",
     role: "Legal Advisor",
-    country: "South Africa",
+    country: "England",
     bio: "Trusted legal advisor overseeing corporate governance, compliance, and regulatory strategy.",
     gradient: "from-amber-700 to-orange-900",
     accent: "brown",
