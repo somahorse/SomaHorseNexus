@@ -77,18 +77,21 @@ export default function TeamMemberSection() {
                             amber: "from-amber-500 to-orange-600",
                             emerald: "from-emerald-500 to-teal-600",
                             rose: "from-rose-500 to-pink-600",
+                            brown: "from-amber-700 to-orange-900",
                         };
                         const glows: Record<string, string> = {
                             cyan: "shadow-cyan-500/20",
                             amber: "shadow-amber-500/20",
                             emerald: "shadow-emerald-500/20",
                             rose: "shadow-rose-500/20",
+                            brown: "shadow-amber-900/30",
                         };
                         const accents: Record<string, string> = {
                             cyan: "text-cyan-300 bg-cyan-500/20 border-cyan-500/30",
                             amber: "text-amber-300 bg-amber-500/20 border-amber-500/30",
                             emerald: "text-emerald-300 bg-emerald-500/20 border-emerald-500/30",
                             rose: "text-rose-300 bg-rose-500/20 border-rose-500/30",
+                            brown: "text-amber-300 bg-amber-500/20 border-amber-500/30",
                         };
                         const gradient = gradients[member.accent] || gradients.cyan;
                         const glow = glows[member.accent] || glows.cyan;
@@ -137,6 +140,7 @@ export default function TeamMemberSection() {
                                     amber: "from-amber-500 to-orange-600",
                                     emerald: "from-emerald-500 to-teal-600",
                                     rose: "from-rose-500 to-pink-600",
+                                    brown: "from-amber-700 to-orange-900",
                                 };
                                 const gradient = gradients[member.accent] || gradients.indigo;
                                 return (
