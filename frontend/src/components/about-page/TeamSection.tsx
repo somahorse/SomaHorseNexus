@@ -154,7 +154,7 @@ export default function TeamMemberSection() {
                             })}
                         </div>
                         <p className="text-sm text-slate-500 text-center">
-                            5 passionate individuals.&nbsp; 1 mission.&nbsp; Infinite potential.
+                            {teamMembers.length} passionate individuals.&nbsp; 1 mission.&nbsp; Infinite potential.
                         </p>
                     </div>
                 </ScrollReveal>
