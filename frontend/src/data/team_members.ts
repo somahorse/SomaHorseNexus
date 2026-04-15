@@ -17,7 +17,7 @@ export const teamMembers = [
     gradient: "from-amber-700 to-orange-900",
     accent: "brown",
     image: "/team/tony.jpeg",
-    flag: "/flags/south-africa.svg"
+    flag: "/flags/England-Flag.svg"
   },
   {
     name: "Nosihle Nondlazi",
