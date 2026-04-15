@@ -10,6 +10,16 @@ export const teamMembers = [
     flag: "/flags/south-africa.svg"
   },
   {
+    name: "Tony Tiyou ",
+    role: "Legal Advisor",
+    country: "South Africa",
+    bio: "Trusted legal advisor overseeing corporate governance, compliance, and regulatory strategy.",
+    gradient: "from-amber-700 to-orange-900",
+    accent: "brown",
+    image: "/team/tony.jpeg",
+    flag: "/flags/south-africa.svg"
+  },
+  {
     name: "Nosihle Nondlazi",
     role: "Sales Lead",
     country: "South Africa",

@@ -7,7 +7,6 @@ import {
     BadgeCheck,
     BarChart3,
     ChevronDown,
-    ChevronRight,
     CreditCard,
     Factory,
     GraduationCap,
