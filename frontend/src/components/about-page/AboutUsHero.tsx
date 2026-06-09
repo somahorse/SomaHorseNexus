@@ -34,7 +34,7 @@ export default function AboutUsHero() {
                         </span>
                     </h1>
                     <p className="mt-6 max-w-2xl text-lg text-slate-400 leading-relaxed mx-auto">
-                        Somahorse Nexus delivers tailored AI solutions designed for Africa&apos;s key industries — building the operating system for Africa&apos;s AI economy.
+                        Somahorse AI delivers tailored AI solutions designed for Africa&apos;s key industries — building the operating system for Africa&apos;s AI economy.
                     </p>
 
                     {/* Stats row */}
