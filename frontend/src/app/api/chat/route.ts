@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent";
+const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
 interface ChatMessage {
     role: "user" | "assistant";
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
         });
         contents.push({
             role: "model",
-            parts: [{ text: "I understand. I am Nexus, the AI assistant for Somahorse Nexus. I will follow these instructions and help users learn about the platform, guide talent through the signup process, and assist clients with AI solution requests. How can I help you today?" }]
+            parts: [{ text: "I understand. I am Soma, the AI assistant for Somahorse AI. I will follow these instructions and help users learn about the platform, guide talent through the signup process, and assist clients with AI solution requests. How can I help you today?" }]
         });
 
         // Add conversation history
