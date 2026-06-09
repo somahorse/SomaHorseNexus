@@ -43,7 +43,7 @@ export default function BusinessSection() {
                                 Build With <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-500 to-indigo-600">Verified Talent</span>
                             </h2>
                             <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-                                Access pre-vetted AI engineers ready to deliver. We handle sourcing, verification, and project orchestration so you can focus on business outcomes.
+                                Access pre-vetted developers ready to deliver. We handle sourcing, verification, and project orchestration so you can focus on business outcomes.
                             </p>
                             <ul className="space-y-4 mb-8">
                                 <ListItem text="Assessment-verified talent pools" />
