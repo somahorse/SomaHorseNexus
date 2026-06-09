@@ -230,7 +230,7 @@ export default function NexusChatbot() {
                         {/* Tooltip */}
                         <div className="absolute bottom-full right-0 mb-3 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                             <div className="bg-slate-900 text-white text-sm px-3 py-2 rounded-lg whitespace-nowrap shadow-xl">
-                                Chat with Nexus
+                                Chat with Soma
                                 <div className="absolute top-full right-6 border-8 border-transparent border-t-slate-900" />
                             </div>
                         </div>
@@ -256,7 +256,7 @@ export default function NexusChatbot() {
                                 </div>
                                 <div>
                                     <h3 className="text-white font-bold text-lg flex items-center gap-2">
-                                        Nexus
+                                        Soma
                                         <Sparkles size={14} className="text-cyan-200" />
                                     </h3>
                                     <div className="flex items-center gap-1.5">
@@ -358,7 +358,7 @@ export default function NexusChatbot() {
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
                                     onKeyPress={handleKeyPress}
-                                    placeholder="Ask Nexus anything..."
+                                    placeholder="Ask Soma anything..."
                                     disabled={isLoading}
                                     className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50 transition-colors disabled:opacity-50"
                                 />
