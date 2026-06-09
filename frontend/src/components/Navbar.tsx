@@ -53,7 +53,7 @@ export default function Navbar() {
                         <div className="hidden sm:flex flex-col leading-tight">
                             <div className="flex items-center gap-2">
                                 <span className="text-xl font-bold text-slate-900 tracking-tight">
-                                    Somahorse Nexus
+                                    Somahorse AI
                                 </span>
                             </div>
                             <span className="text-[10px] uppercase tracking-wider font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-violet-600">
